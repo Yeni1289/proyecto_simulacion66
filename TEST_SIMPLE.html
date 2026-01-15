@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Simple - Buscar Notebooks</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            padding: 12px 24px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-left: 4px solid #007bff;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+        .error {
+            border-left-color: #dc3545;
+            background: #fff5f5;
+        }
+        .success {
+            border-left-color: #28a745;
+            background: #f0fff0;
+        }
+        .log {
+            background: #f8f9fa;
+            padding: 10px;
+            margin: 10px 0;
+            border-left: 3px solid #6c757d;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔬 Test de Búsqueda de Notebooks</h1>
+    
+    <div style="background: #fff3cd; padding: 15px; border-left: 4px solid #ffc107; margin: 20px 0;">
+        <strong>⚠️ IMPORTANTE:</strong> El servidor Django debe estar corriendo en http://127.0.0.1:8000
+    </div>
+    
+    <h3>Ingresa la ruta de tu carpeta de notebooks:</h3>
+    <input 
+        type="text" 
+        id="folderPath" 
+        placeholder="C:\Users\yanet\Downloads\proyecto-simulacion-ml-main\datasets"
+        value="C:\Users\yanet\Downloads\proyecto-simulacion-ml-main\datasets"
+    >
+    
+    <button onclick="testScan()">🔍 Buscar Notebooks</button>
+    <button onclick="clearLog()">🗑️ Limpiar</button>
+    
+    <div id="log"></div>
+    <div id="result"></div>
+
+    <script>
+        const logDiv = document.getElementById('log');
+        const resultDiv = document.getElementById('result');
+        
+        function log(message, type = 'info') {
+            const entry = document.createElement('div');
+            entry.className = 'log';
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logDiv.appendChild(entry);
+            console.log(message);
+        }
+        
+        function clearLog() {
+            logDiv.innerHTML = '';
+            resultDiv.innerHTML = '';
+        }
+
+        async function testScan() {
+            const path = document.getElementById('folderPath').value.trim();
+            
+            log('🚀 Iniciando prueba...');
+            log('📁 Ruta: ' + path);
+            
+            if (!path) {
+                resultDiv.textContent = '❌ Por favor ingresa una ruta';
+                resultDiv.className = 'error';
+                return;
+            }
+
+            resultDiv.textContent = '⏳ Escaneando...';
+            resultDiv.className = '';
+            
+            try {
+                const formData = new FormData();
+                formData.append('folder_path', path);
+
+                const url = 'http://127.0.0.1:8000/api/scan-folder/';
+                log('📤 Enviando POST a: ' + url);
+
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: formData,
+                    mode: 'cors'
+                });
+
+                log('📥 Respuesta recibida: ' + response.status + ' ' + response.statusText);
+
+                const data = await response.json();
+                log('📊 Datos parseados correctamente');
+
+                if (data.success) {
+                    let result = `✅ ¡Éxito!\n\n`;
+                    result += `Carpeta: ${data.folder}\n`;
+                    result += `Notebooks encontrados: ${data.notebooks.length}\n\n`;
+                    
+                    if (data.notebooks.length > 0) {
+                        result += 'Archivos:\n';
+                        data.notebooks.forEach((nb, i) => {
+                            result += `  ${i+1}. ${nb.name}\n`;
+                            result += `     Ruta: ${nb.path}\n`;
+                            result += `     Slug: ${nb.slug}\n\n`;
+                        });
+                    } else {
+                        result += '⚠️ No se encontraron archivos .ipynb\n';
+                    }
+                    
+                    resultDiv.textContent = result;
+                    resultDiv.className = data.notebooks.length > 0 ? 'success' : '';
+                    log('✅ Operación completada exitosamente');
+                } else {
+                    resultDiv.textContent = `❌ Error del servidor:\n${data.error}`;
+                    resultDiv.className = 'error';
+                    log('❌ Error: ' + data.error);
+                }
+            } catch (error) {
+                resultDiv.textContent = `❌ Error de conexión:\n${error.message}\n\nVerifica que:\n1. El servidor está corriendo (python manage.py runserver)\n2. La URL es http://127.0.0.1:8000\n3. No hay problemas de CORS`;
+                resultDiv.className = 'error';
+                log('❌ Error de conexión: ' + error.message);
+                console.error('Error completo:', error);
+            }
+        }
+
+        // Enter key support
+        document.getElementById('folderPath').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') testScan();
+        });
+        
+        log('✅ Página cargada y lista');
+    </script>
+</body>
+</html>
