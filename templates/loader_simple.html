@@ -286,7 +286,7 @@
 
         <div class="drop-zone" id="dropZone">
             <div class="drop-zone-icon">📁</div>
-            <div class="drop-zone-title">Arrastra tu carpeta aquí</div>
+            <div class="drop-zone-title">Arrastra tu Archivo aquí</div>
             <div class="drop-zone-text">o haz clic para seleccionar archivos .ipynb</div>
             <div class="drop-zone-button">Seleccionar Archivos</div>
             <input type="file" id="fileInput" accept=".ipynb" multiple>
@@ -295,7 +295,7 @@
         <div class="or-divider">O</div>
 
         <div class="search-box">
-            <label class="search-label">Ingresa la ruta completa de tu carpeta de notebooks:</label>
+            <label class="search-label">Ingresa la ruta completa de tu carpeta de los archivos:</label>
             
             <input 
                 type="text" 
@@ -304,7 +304,7 @@
                 value="C:\Users\yanet\Downloads\proyecto-simulacion-ml-main\datasets"
             >
             
-            <button onclick="buscarNotebooks()">🔍 Buscar Notebooks</button>
+            <button onclick="buscarArchivos()">🔍 Buscar archivos</button>
         </div>
         
         <div id="result"></div>
@@ -450,7 +450,7 @@
                     html += '</div>';
                     resultDiv.innerHTML = html;
                 } else {
-                    resultDiv.innerHTML = '<div class="empty-message">⚠️ No se encontraron notebooks en esta carpeta</div>';
+                    resultDiv.innerHTML = '<div class="empty-message">⚠️ No se encontraron archivos en esta carpeta</div>';
                 }
                 
             } catch (error) {

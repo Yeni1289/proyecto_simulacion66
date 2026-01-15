@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dataset Loader - Notebook Viewer</title>
+    <title>Dataset de Simulación</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/app.css">
@@ -30,7 +30,7 @@
                 <div class="app-logo">
                     <div class="logo-icon">📊</div>
                     <div class="logo-text">
-                        <h1>Notebook Viewer</h1>
+                        <h1>Simulación I</h1>
                         <p>Visualiza tus análisis de forma interactiva</p>
                     </div>
                 </div>
@@ -39,7 +39,7 @@
             <div class="loader-card">
                 <div class="card-header">
                     <h2>Cargar Dataset</h2>
-                    <p>Ingresa la ruta completa de la carpeta con tus notebooks</p>
+                    <p>Ingresa la ruta completa de la carpeta con tus archivos</p>
                 </div>
 
                 <div class="card-body">
@@ -57,7 +57,7 @@
                         </div>
                         <button class="scan-btn" id="scanBtn" onclick="testClick(); return false;">
                             <span class="btn-icon">🔍</span>
-                            <span class="btn-text">Buscar Notebooks</span>
+                            <span class="btn-text">Buscar archivos</span>
                         </button>
                         <button class="scan-btn test-btn" id="testBtn" onclick="alert('FUNCIONA!'); return false;">
                             <span class="btn-icon">🧪</span>
@@ -81,7 +81,7 @@
             <!-- Results Section -->
             <div class="results-section" id="resultsSection" style="display: none;">
                 <div class="results-header">
-                    <h3>Notebooks Encontrados</h3>
+                    <h3>archivos Encontrados</h3>
                     <span class="results-count" id="resultsCount">0</span>
                 </div>
                 <div class="notebooks-grid" id="notebooksGrid"></div>
@@ -133,7 +133,7 @@
             if (scanBtn) {
                 scanBtn.addEventListener('click', function(e) {
                     e.preventDefault();
-                    console.log('🔘 Click en Buscar Notebooks');
+                    console.log('🔘 Click en Buscar archivos');
                     scanFolder();
                 });
             }
