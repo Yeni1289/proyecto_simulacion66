@@ -28,25 +28,25 @@
         <div class="loader-content">
             <div class="loader-header">
                 <div class="app-logo">
-                    <div class="logo-icon">📊</div>
+                    <div class="logo-icon">⬢</div>
                     <div class="logo-text">
-                        <h1>Simulación I</h1>
-                        <p>Visualiza tus análisis de forma interactiva</p>
+                        <h1>Data Analytics Hub</h1>
+                        <p>Plataforma avanzada de análisis y visualización de datos</p>
                     </div>
                 </div>
             </div>
 
             <div class="loader-card">
                 <div class="card-header">
-                    <h2>Cargar Dataset</h2>
-                    <p>Ingresa la ruta completa de la carpeta con tus notebooks</p>
+                    <h2>Importar Proyecto</h2>
+                    <p>Selecciona la ubicación de tus archivos de análisis</p>
                 </div>
 
                 <div class="card-body">
                     <!-- Path Input -->
                     <div class="path-input-group">
                         <div class="input-wrapper">
-                            <span class="input-icon">🗂️</span>
+                            <span class="input-icon">📁</span>
                             <input 
                                 type="text" 
                                 id="folderPath" 
@@ -56,21 +56,21 @@
                             >
                         </div>
                         <button class="scan-btn" id="scanBtn">
-                            <span class="btn-icon">🔍</span>
-                            <span class="btn-text">Buscar archivos</span>
+                            <span class="btn-icon">⚡</span>
+                            <span class="btn-text">Escanear Directorio</span>
                         </button>
                         <button class="scan-btn test-btn" id="testBtn">
-                            <span class="btn-icon">🧪</span>
-                            <span class="btn-text">Test</span>
+                            <span class="btn-icon">🎯</span>
+                            <span class="btn-text">Prueba Rápida</span>
                         </button>
                     </div>
 
                     <!-- Recent Paths -->
                     {% if last_path %}
                     <div class="recent-section">
-                        <div class="recent-label">Última ruta usada:</div>
+                        <div class="recent-label">Directorio Reciente:</div>
                         <div class="recent-path" id="recentPath">
-                            <span class="recent-icon">⏱️</span>
+                            <span class="recent-icon">🕐</span>
                             <span class="recent-text">{{ last_path }}</span>
                         </div>
                     </div>
@@ -81,7 +81,7 @@
             <!-- Results Section -->
             <div class="results-section" id="resultsSection" style="display: none;">
                 <div class="results-header">
-                    <h3>Notebooks Encontrados</h3>
+                    <h3>Archivos de Análisis Detectados</h3>
                     <span class="results-count" id="resultsCount">0</span>
                 </div>
                 <div class="notebooks-grid" id="notebooksGrid"></div>
