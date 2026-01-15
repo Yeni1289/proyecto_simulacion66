@@ -47,6 +47,33 @@
             border-color: #10b981 !important;
             box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1) !important;
         }
+        .upload-card {
+            margin-top: 25px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(16, 185, 129, 0.2);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 12px 30px rgba(16, 185, 129, 0.15);
+        }
+        .upload-header h3 { color: #059669; margin-bottom: 6px; }
+        .upload-header p { color: #047857; margin-bottom: 12px; }
+        .drop-zone {
+            border: 2px dashed rgba(16, 185, 129, 0.45);
+            border-radius: 14px;
+            padding: 24px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.85);
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+        .drop-zone:hover, .drop-zone.dragover {
+            background: rgba(16, 185, 129, 0.08);
+            border-color: rgba(16, 185, 129, 0.75);
+            box-shadow: 0 10px 24px rgba(16, 185, 129, 0.2);
+        }
+        .drop-icon { font-size: 2.4em; margin-bottom: 8px; }
+        .drop-text { color: #065f46; font-weight: 700; margin-bottom: 6px; }
+        .drop-hint { color: #047857; font-size: 0.95em; margin-bottom: 10px; }
         .scan-btn {
             background: linear-gradient(135deg, #10b981, #059669) !important;
             border: none !important;
@@ -149,6 +176,24 @@
                         </button>
                     </div>
 
+                    <!-- Upload / Drag & Drop -->
+                    <div class="upload-card">
+                        <div class="upload-header">
+                            <h3>Subir o arrastrar notebook</h3>
+                            <p>Selecciona un .ipynb o arrástralo aquí para procesarlo al instante</p>
+                        </div>
+                        <div id="dropZone" class="drop-zone">
+                            <div class="drop-icon">📥</div>
+                            <div class="drop-text">Arrastra tu archivo .ipynb o haz clic para elegir</div>
+                            <div class="drop-hint">Tamaño máximo recomendado 20 MB</div>
+                            <input type="file" id="fileInput" accept=".ipynb" style="display:none;" />
+                            <button class="scan-btn" id="fileBtn" type="button">
+                                <span class="btn-icon">📂</span>
+                                <span class="btn-text">Elegir archivo</span>
+                            </button>
+                        </div>
+                    </div>
+
                     <!-- Recent Paths -->
                     {% if last_path %}
                     <div class="recent-section">
@@ -199,6 +244,9 @@
             const scanBtn = document.getElementById('scanBtn');
             const testBtn = document.getElementById('testBtn');
             const folderPath = document.getElementById('folderPath');
+            const dropZone = document.getElementById('dropZone');
+            const fileInput = document.getElementById('fileInput');
+            const fileBtn = document.getElementById('fileBtn');
             
             console.log('🔍 Botón scanBtn:', scanBtn ? 'ENCONTRADO' : 'NO ENCONTRADO');
             console.log('🔍 Botón testBtn:', testBtn ? 'ENCONTRADO' : 'NO ENCONTRADO');
@@ -240,6 +288,37 @@
                     const path = '{{ last_path }}';
                     document.getElementById('folderPath').value = path;
                     scanFolder();
+                });
+            }
+
+            // Drag & drop upload
+            if (dropZone && fileInput) {
+                ['dragenter', 'dragover'].forEach(evt => {
+                    dropZone.addEventListener(evt, e => {
+                        e.preventDefault();
+                        dropZone.classList.add('dragover');
+                    });
+                });
+                ['dragleave', 'drop'].forEach(evt => {
+                    dropZone.addEventListener(evt, e => {
+                        e.preventDefault();
+                        dropZone.classList.remove('dragover');
+                    });
+                });
+                dropZone.addEventListener('drop', e => {
+                    handleFiles(e.dataTransfer.files);
+                });
+                dropZone.addEventListener('click', () => fileInput.click());
+            }
+
+            if (fileInput) {
+                fileInput.addEventListener('change', e => handleFiles(e.target.files));
+            }
+
+            if (fileBtn) {
+                fileBtn.addEventListener('click', e => {
+                    e.preventDefault();
+                    fileInput.click();
                 });
             }
         });
@@ -295,6 +374,61 @@
             } finally {
                 showLoading(false);
             }
+        }
+
+        function handleFiles(files) {
+            const file = files && files[0];
+            if (!file) return;
+            if (!file.name.toLowerCase().endsWith('.ipynb')) {
+                showToast('Solo se permiten archivos .ipynb', 'error');
+                alert('Solo se permiten archivos .ipynb');
+                return;
+            }
+            uploadNotebook(file);
+        }
+
+        async function uploadNotebook(file) {
+            showLoading(true, 'Subiendo notebook...');
+            const reader = new FileReader();
+
+            reader.onerror = function() {
+                showToast('Error leyendo el archivo', 'error');
+                showLoading(false);
+            };
+
+            reader.onload = async function(e) {
+                try {
+                    const content = e.target.result;
+                    const formData = new FormData();
+                    formData.append('notebook_name', file.name);
+                    formData.append('notebook_content', content);
+
+                    const response = await fetch('/api/upload-notebook/', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        showToast('✓ Notebook procesado', 'success');
+                        setTimeout(() => {
+                            window.location.href = `/notebook/${data.slug}/`;
+                        }, 400);
+                    } else {
+                        showToast('Error: ' + data.error, 'error');
+                        alert('❌ ' + data.error);
+                    }
+                } catch (error) {
+                    console.error(error);
+                    showToast('Error: ' + error.message, 'error');
+                    alert('❌ Error: ' + error.message);
+                } finally {
+                    showLoading(false);
+                }
+            };
+
+            reader.readAsText(file);
         }
 
         // Display Notebooks
