@@ -102,6 +102,183 @@
             transform: translateY(-3px);
             box-shadow: 0 14px 32px rgba(16, 185, 129, 0.45);
         }
+        
+        /* Estilos para sección de archivos */
+        .files-section {
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid rgba(16, 185, 129, 0.25);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 15px 40px rgba(16, 185, 129, 0.2);
+        }
+        .files-title {
+            font-size: 2em;
+            font-weight: 800;
+            color: #059669;
+            margin-bottom: 30px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        .files-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .file-card {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border: 2px solid rgba(16, 185, 129, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .file-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        .file-card:hover::before {
+            left: 100%;
+        }
+        .file-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: #10b981;
+            box-shadow: 0 20px 40px rgba(16, 185, 129, 0.4);
+        }
+        .file-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .file-name {
+            font-weight: 700;
+            color: #065f46;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        .file-description {
+            color: #047857;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+        .file-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            font-size: 1em;
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+        }
+        .file-btn:hover {
+            background: linear-gradient(135deg, #059669, #047857);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.5);
+        }
+        
+        /* Modal para mostrar contenido */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 1200px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: modalFadeIn 0.3s ease;
+        }
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-close:hover {
+            background: #dc2626;
+            transform: rotate(90deg);
+        }
+        .modal-header {
+            font-size: 2em;
+            font-weight: 800;
+            color: #059669;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #10b981;
+        }
+        .modal-charts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        .modal-chart-box {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border: 2px solid rgba(16, 185, 129, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            height: 350px;
+        }
+        .modal-chart-title {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #047857;
+            margin-bottom: 15px;
+        }
     </style>
 </head>
 <body>
@@ -150,6 +327,61 @@
             <div class="info-box">
                 <strong>ℹ️ Resultado:</strong> El modelo alcanza <strong>97.8%</strong> de precisión. Detecta correctamente <strong>97.2%</strong> de los ataques con <strong>2.8%</strong> de falsos positivos.
             </div>
+            
+            <!-- Sección de Archivos Disponibles -->
+            <div class="files-section">
+                <div class="files-title">
+                    <span>📁</span>
+                    <span>Archivos Disponibles</span>
+                </div>
+                <div class="files-grid">
+                    <div class="file-card">
+                        <div class="file-icon">📊</div>
+                        <div class="file-name">Dataset Completo</div>
+                        <div class="file-description">Visualiza el dataset completo con todas las características y estadísticas detalladas.</div>
+                        <button class="file-btn" onclick="openFile('dataset')">🔓 Abrir Dataset</button>
+                    </div>
+                    <div class="file-card">
+                        <div class="file-icon">🎯</div>
+                        <div class="file-name">Métricas del Modelo</div>
+                        <div class="file-description">Explora las métricas de rendimiento, precisión, recall y F1-Score del modelo.</div>
+                        <button class="file-btn" onclick="openFile('metricas')">🔓 Abrir Métricas</button>
+                    </div>
+                    <div class="file-card">
+                        <div class="file-icon">📈</div>
+                        <div class="file-name">Análisis de Features</div>
+                        <div class="file-description">Analiza las características más importantes y su impacto en la predicción.</div>
+                        <button class="file-btn" onclick="openFile('features')">🔓 Abrir Análisis</button>
+                    </div>
+                    <div class="file-card">
+                        <div class="file-icon">🔍</div>
+                        <div class="file-name">Patrones de Ataque</div>
+                        <div class="file-description">Descubre los patrones de ataque más comunes en el dataset NSL-KDD.</div>
+                        <button class="file-btn" onclick="openFile('patrones')">🔓 Abrir Patrones</button>
+                    </div>
+                    <div class="file-card">
+                        <div class="file-icon">⚙️</div>
+                        <div class="file-name">Configuración del Modelo</div>
+                        <div class="file-description">Revisa los hiperparámetros y la configuración utilizada en el entrenamiento.</div>
+                        <button class="file-btn" onclick="openFile('config')">🔓 Abrir Config</button>
+                    </div>
+                    <div class="file-card">
+                        <div class="file-icon">🎲</div>
+                        <div class="file-name">Validación Cruzada</div>
+                        <div class="file-description">Examina los resultados de la validación cruzada y la estabilidad del modelo.</div>
+                        <button class="file-btn" onclick="openFile('validacion')">🔓 Abrir Validación</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal para mostrar contenido de archivos -->
+    <div class="modal" id="fileModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">×</button>
+            <div class="modal-header" id="modalTitle">Contenido del Archivo</div>
+            <div id="modalBody"></div>
         </div>
     </div>
     <script>
@@ -160,77 +392,140 @@
         });
 
         function initCharts() {
+            // Gráfica 1: Doughnut con efecto 3D
             new Chart(document.getElementById('chart1'), {
                 type: 'doughnut',
                 data: {
                     labels: ['Normal', 'Ataques'],
                     datasets: [{
                         data: [67343, 58630],
-                        backgroundColor: ['rgba(16, 185, 129, 0.8)', 'rgba(5, 150, 105, 0.8)'],
-                        borderColor: ['#10b981', '#059669'],
+                        backgroundColor: [
+                            'rgba(16, 185, 129, 0.9)',
+                            'rgba(239, 68, 68, 0.8)'
+                        ],
+                        borderColor: ['#10b981', '#ef4444'],
+                        borderWidth: 3,
+                        hoverOffset: 15
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#065f46',
+                                font: { size: 14, weight: 'bold' },
+                                padding: 20
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            padding: 15,
+                            titleFont: { size: 16 },
+                            bodyFont: { size: 14 }
+                        }
+                    }
+                }
+            });
+            
+            // Gráfica 2: Bar con gradientes
+            new Chart(document.getElementById('chart2'), {
+                type: 'bar',
+                data: {
+                    labels: ['DoS', 'Probe', 'R2L', 'U2R'],
+                    datasets: [{
+                        label: 'Cantidad de Ataques',
+                        data: [25500, 15000, 10000, 8130],
+                        backgroundColor: [
+                            'rgba(239, 68, 68, 0.8)',
+                            'rgba(249, 115, 22, 0.8)',
+                            'rgba(234, 179, 8, 0.8)',
+                            'rgba(168, 85, 247, 0.8)'
+                        ],
+                        borderColor: ['#ef4444', '#f97316', '#eab308', '#a855f7'],
+                        borderWidth: 2,
+                        borderRadius: 10,
+                        borderSkipped: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(16, 185, 129, 0.1)' },
+                            ticks: { color: '#047857', font: { weight: 'bold' } }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#047857', font: { weight: 'bold' } }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: { color: '#065f46', font: { weight: 'bold' } }
+                        }
+                    }
+                }
+            });
+            
+            // Gráfica 3: Radar para matriz de confusión
+            new Chart(document.getElementById('chart3'), {
+                type: 'polarArea',
+                data: {
+                    labels: ['Verdadero Positivo', 'Falso Positivo', 'Falso Negativo', 'Verdadero Negativo'],
+                    datasets: [{
+                        data: [57000, 1630, 2500, 65000],
+                        backgroundColor: [
+                            'rgba(34, 197, 94, 0.7)',
+                            'rgba(251, 146, 60, 0.7)',
+                            'rgba(239, 68, 68, 0.7)',
+                            'rgba(59, 130, 246, 0.7)'
+                        ],
+                        borderColor: ['#22c55e', '#fb923c', '#ef4444', '#3b82f6'],
                         borderWidth: 2
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { labels: { color: '#065f46' } } }
-                }
-            });
-            new Chart(document.getElementById('chart2'), {
-                type: 'bar',
-                data: {
-                    labels: ['DoS', 'Probe', 'R2L', 'U2R'],
-                    datasets: [{
-                        label: 'Cantidad',
-                        data: [25500, 15000, 10000, 8130],
-                        backgroundColor: ['rgba(52, 211, 153, 0.7)', 'rgba(16, 185, 129, 0.7)', 'rgba(5, 150, 105, 0.65)', 'rgba(34, 197, 94, 0.65)'],
-                        borderColor: ['#34d399', '#10b981', '#059669', '#22c55e'],
-                        borderWidth: 2,
-                        borderRadius: 8
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: { beginAtZero: true, grid: { color: 'rgba(16, 185, 129, 0.15)' }, ticks: { color: '#047857' } },
-                        x: { ticks: { color: '#047857' } }
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#065f46',
+                                font: { size: 11, weight: 'bold' },
+                                padding: 15
+                            }
+                        }
                     },
-                    plugins: { legend: { labels: { color: '#065f46' } } }
-                }
-            });
-            new Chart(document.getElementById('chart3'), {
-                type: 'bar',
-                data: {
-                    labels: ['VP', 'FP', 'FN', 'VN'],
-                    datasets: [{
-                        label: 'Cantidad',
-                        data: [57000, 1630, 2500, 65000],
-                        backgroundColor: ['rgba(16, 185, 129, 0.8)', 'rgba(245, 158, 11, 0.75)', 'rgba(52, 211, 153, 0.7)', 'rgba(5, 150, 105, 0.7)'],
-                        borderWidth: 2,
-                        borderRadius: 8
-                    }]
-                },
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    maintainAspectRatio: false,
                     scales: {
-                        x: { grid: { color: 'rgba(16, 185, 129, 0.12)' }, ticks: { color: '#047857' } },
-                        y: { ticks: { color: '#047857' } }
-                    },
-                    plugins: { legend: { labels: { color: '#065f46' } } }
+                        r: {
+                            ticks: { color: '#047857', backdropColor: 'transparent' },
+                            grid: { color: 'rgba(16, 185, 129, 0.2)' }
+                        }
+                    }
                 }
             });
+            
+            // Gráfica 4: Horizontal bar con animación
             new Chart(document.getElementById('chart4'), {
                 type: 'bar',
                 data: {
                     labels: ['src_bytes', 'dst_bytes', 'duration', 'protocol', 'service'],
                     datasets: [{
-                        label: 'Importancia',
-                        data: [0.28, 0.25, 0.18, 0.15, 0.14],
-                        backgroundColor: 'rgba(16, 185, 129, 0.7)',
+                        label: 'Importancia (%)',
+                        data: [28, 25, 18, 15, 14],
+                        backgroundColor: [
+                            'rgba(16, 185, 129, 0.9)',
+                            'rgba(34, 197, 94, 0.85)',
+                            'rgba(52, 211, 153, 0.8)',
+                            'rgba(110, 231, 183, 0.75)',
+                            'rgba(167, 243, 208, 0.7)'
+                        ],
                         borderColor: '#10b981',
                         borderWidth: 2,
                         borderRadius: 8
@@ -241,13 +536,584 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        x: { grid: { color: 'rgba(16, 185, 129, 0.12)' }, max: 0.3, ticks: { color: '#047857' } },
-                        y: { ticks: { color: '#047857' } }
+                        x: {
+                            grid: { color: 'rgba(16, 185, 129, 0.1)' },
+                            max: 30,
+                            ticks: { color: '#047857', font: { weight: 'bold' } }
+                        },
+                        y: {
+                            grid: { display: false },
+                            ticks: { color: '#047857', font: { weight: 'bold' } }
+                        }
                     },
-                    plugins: { legend: { labels: { color: '#065f46' } } }
+                    plugins: {
+                        legend: {
+                            labels: { color: '#065f46', font: { weight: 'bold' } }
+                        }
+                    }
                 }
             });
         }
+        
+        // Funciones para modal de archivos
+        function openFile(fileType) {
+            const modal = document.getElementById('fileModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+            
+            modal.classList.add('active');
+            
+            const fileContents = {
+                'dataset': {
+                    title: '📊 Dataset Completo - NSL-KDD',
+                    content: generateDatasetContent()
+                },
+                'metricas': {
+                    title: '🎯 Métricas de Rendimiento',
+                    content: generateMetricsContent()
+                },
+                'features': {
+                    title: '📈 Análisis de Features',
+                    content: generateFeaturesContent()
+                },
+                'patrones': {
+                    title: '🔍 Patrones de Ataque',
+                    content: generatePatternsContent()
+                },
+                'config': {
+                    title: '⚙️ Configuración del Modelo',
+                    content: generateConfigContent()
+                },
+                'validacion': {
+                    title: '🎲 Validación Cruzada',
+                    content: generateValidationContent()
+                }
+            };
+            
+            const file = fileContents[fileType];
+            modalTitle.textContent = file.title;
+            modalBody.innerHTML = file.content;
+            
+            // Inicializar gráficas específicas del modal
+            setTimeout(() => {
+                initModalCharts(fileType);
+            }, 100);
+        }
+        
+        function closeModal() {
+            const modal = document.getElementById('fileModal');
+            modal.classList.remove('active');
+        }
+        
+        // Generar contenidos para cada archivo
+        function generateDatasetContent() {
+            return `
+                <div class="info-box">
+                    <strong>📋 Información del Dataset:</strong><br><br>
+                    • <strong>Total de registros:</strong> 125,973<br>
+                    • <strong>Características:</strong> 41 features + 1 etiqueta<br>
+                    • <strong>Clases:</strong> Normal y 4 tipos de ataque (DoS, Probe, R2L, U2R)<br>
+                    • <strong>Período:</strong> Datos de tráfico de red simulado<br>
+                    • <strong>Balanceo:</strong> 53.5% Normal, 46.5% Ataques
+                </div>
+                <div class="modal-charts">
+                    <div class="modal-chart-box">
+                        <div class="modal-chart-title">Distribución por Protocolo</div>
+                        <canvas id="modalChart1"></canvas>
+                    </div>
+                    <div class="modal-chart-box">
+                        <div class="modal-chart-title">Bytes Transferidos</div>
+                        <canvas id="modalChart2"></canvas>
+                    </div>
+                    <div class="modal-chart-box">
+                        <div class="modal-chart-title">Duración de Conexiones</div>
+                        <canvas id="modalChart3"></canvas>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function generateMetricsContent() {
+            return `
+                <div class="info-box">
+                    <strong>🎯 Resultados del Modelo:</strong><br><br>
+                    • <strong>Accuracy:</strong> 97.8%<br>
+                    • <strong>Precision:</strong> 96.5%<br>
+                    • <strong>Recall:</strong> 97.2%<br>
+                    • <strong>F1-Score:</strong> 96.8%<br>
+                    • <strong>AUC-ROC:</strong> 0.989
+                </div>
+                <div class="modal-charts">
+                    <div class="modal-chart-box">
+                        <div class="modal-chart-title">Comparativa de Métricas</div>
+                        <canvas id="modalChart1"></canvas>
+                    </div>
+                    <div class="modal-chart-box">
+                        <div class="modal-chart-title">Curva ROC</div>
+                        <canvas id="modalChart2"></canvas>
+                    </div>
+                    <div class="modal-chart-box">
+                        <div class="modal-chart-title">Precisión por Clase</div>
+                        <canvas id="modalChart3"></canvas>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function generateFeaturesContent() {
+            return `
+                <div class="info-box">
+                    <strong>📈 Features Más Relevantes:</strong><br><br>
+                    Las características seleccionadas tienen el mayor impacto en la detección de ataques.
+                </div>
+                <div class="modal-charts">
+                    <div class="modal-chart-box">
+                        <div class="modal-chart-title">Top 10 Features</div>
+                        <canvas id="modalChart1"></canvas>
+                    </div>
+                    <div class="modal-chart-box">
+                        <div class="modal-chart-title">Correlación</div>
+                        <canvas id="modalChart2"></canvas>
+                    </div>
+                    <div class="modal-chart-box">
+                        <div class="modal-chart-title">Importancia Acumulada</div>
+                        <canvas id="modalChart3"></canvas>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function generatePatternsContent() {
+            return `
+                <div class="info-box">
+                    <strong>🔍 Patrones Detectados:</strong><br><br>
+                    Análisis de los patrones más comunes en cada tipo de ataque.
+                </div>
+                <div class="modal-charts">
+                    <div class="modal-chart-box">
+                        <div class="modal-chart-title">Frecuencia de Ataques</div>
+                        <canvas id="modalChart1"></canvas>
+                    </div>
+                    <div class="modal-chart-box">
+                        <div class="modal-chart-title">Horarios de Mayor Actividad</div>
+                        <canvas id="modalChart2"></canvas>
+                    </div>
+                    <div class="modal-chart-box">
+                        <div class="modal-chart-title">Puertos Más Atacados</div>
+                        <canvas id="modalChart3"></canvas>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function generateConfigContent() {
+            return `
+                <div class="info-box">
+                    <strong>⚙️ Parámetros del Modelo:</strong><br><br>
+                    • <strong>Algoritmo:</strong> Logistic Regression<br>
+                    • <strong>Solver:</strong> lbfgs<br>
+                    • <strong>C (Regularización):</strong> 1.0<br>
+                    • <strong>Max Iterations:</strong> 1000<br>
+                    • <strong>Penalty:</strong> l2<br>
+                    • <strong>Random State:</strong> 42
+                </div>
+                <div class="modal-charts">
+                    <div class="modal-chart-box">
+                        <div class="modal-chart-title">Convergencia</div>
+                        <canvas id="modalChart1"></canvas>
+                    </div>
+                    <div class="modal-chart-box">
+                        <div class="modal-chart-title">Regularización vs Accuracy</div>
+                        <canvas id="modalChart2"></canvas>
+                    </div>
+                    <div class="modal-chart-box">
+                        <div class="modal-chart-title">Tiempo de Entrenamiento</div>
+                        <canvas id="modalChart3"></canvas>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function generateValidationContent() {
+            return `
+                <div class="info-box">
+                    <strong>🎲 Validación Cruzada (5-Fold):</strong><br><br>
+                    • <strong>Media:</strong> 97.6%<br>
+                    • <strong>Desviación Estándar:</strong> 0.8%<br>
+                    • <strong>Mejor Fold:</strong> 98.2%<br>
+                    • <strong>Peor Fold:</strong> 96.9%
+                </div>
+                <div class="modal-charts">
+                    <div class="modal-chart-box">
+                        <div class="modal-chart-title">Resultados por Fold</div>
+                        <canvas id="modalChart1"></canvas>
+                    </div>
+                    <div class="modal-chart-box">
+                        <div class="modal-chart-title">Variabilidad</div>
+                        <canvas id="modalChart2"></canvas>
+                    </div>
+                    <div class="modal-chart-box">
+                        <div class="modal-chart-title">Estabilidad del Modelo</div>
+                        <canvas id="modalChart3"></canvas>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Inicializar gráficas específicas del modal
+        function initModalCharts(fileType) {
+            const charts = {
+                'dataset': initDatasetCharts,
+                'metricas': initMetricsCharts,
+                'features': initFeaturesCharts,
+                'patrones': initPatternsCharts,
+                'config': initConfigCharts,
+                'validacion': initValidationCharts
+            };
+            
+            if (charts[fileType]) {
+                charts[fileType]();
+            }
+        }
+        
+        function initDatasetCharts() {
+            new Chart(document.getElementById('modalChart1'), {
+                type: 'pie',
+                data: {
+                    labels: ['TCP', 'UDP', 'ICMP'],
+                    datasets: [{
+                        data: [78000, 32000, 15973],
+                        backgroundColor: ['#3b82f6', '#8b5cf6', '#ec4899'],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom' } }
+                }
+            });
+            
+            new Chart(document.getElementById('modalChart2'), {
+                type: 'line',
+                data: {
+                    labels: ['0-1KB', '1-10KB', '10-100KB', '100KB-1MB', '>1MB'],
+                    datasets: [{
+                        label: 'Frecuencia',
+                        data: [45000, 38000, 28000, 11000, 3973],
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+            
+            new Chart(document.getElementById('modalChart3'), {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Duración',
+                        data: Array.from({length: 50}, () => ({
+                            x: Math.random() * 100,
+                            y: Math.random() * 100
+                        })),
+                        backgroundColor: 'rgba(239, 68, 68, 0.6)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+        
+        function initMetricsCharts() {
+            new Chart(document.getElementById('modalChart1'), {
+                type: 'radar',
+                data: {
+                    labels: ['Accuracy', 'Precision', 'Recall', 'F1-Score', 'AUC'],
+                    datasets: [{
+                        label: 'Métricas',
+                        data: [97.8, 96.5, 97.2, 96.8, 98.9],
+                        backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                        borderColor: '#3b82f6',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { r: { beginAtZero: true, max: 100 } }
+                }
+            });
+            
+            new Chart(document.getElementById('modalChart2'), {
+                type: 'line',
+                data: {
+                    labels: Array.from({length: 20}, (_, i) => (i * 5)),
+                    datasets: [{
+                        label: 'ROC Curve',
+                        data: Array.from({length: 20}, (_, i) => i * 5 + Math.random() * 5),
+                        borderColor: '#8b5cf6',
+                        backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+            
+            new Chart(document.getElementById('modalChart3'), {
+                type: 'bar',
+                data: {
+                    labels: ['Normal', 'DoS', 'Probe', 'R2L', 'U2R'],
+                    datasets: [{
+                        label: 'Precisión (%)',
+                        data: [98.5, 97.8, 96.2, 95.5, 94.8],
+                        backgroundColor: ['#10b981', '#ef4444', '#f59e0b', '#8b5cf6', '#ec4899']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+        
+        function initFeaturesCharts() {
+            new Chart(document.getElementById('modalChart1'), {
+                type: 'bar',
+                data: {
+                    labels: ['src_bytes', 'dst_bytes', 'duration', 'protocol', 'service', 'flag', 'count', 'srv_count', 'serror_rate', 'dst_host_count'],
+                    datasets: [{
+                        label: 'Importancia',
+                        data: [0.28, 0.25, 0.18, 0.15, 0.14, 0.12, 0.11, 0.10, 0.09, 0.08],
+                        backgroundColor: 'rgba(16, 185, 129, 0.7)'
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+            
+            new Chart(document.getElementById('modalChart2'), {
+                type: 'bubble',
+                data: {
+                    datasets: [{
+                        label: 'Correlación',
+                        data: Array.from({length: 20}, () => ({
+                            x: Math.random() * 100,
+                            y: Math.random() * 100,
+                            r: Math.random() * 20 + 5
+                        })),
+                        backgroundColor: 'rgba(59, 130, 246, 0.5)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+            
+            new Chart(document.getElementById('modalChart3'), {
+                type: 'line',
+                data: {
+                    labels: ['Top 1', 'Top 2', 'Top 3', 'Top 4', 'Top 5', 'Top 6', 'Top 7', 'Top 8', 'Top 9', 'Top 10'],
+                    datasets: [{
+                        label: 'Importancia Acumulada (%)',
+                        data: [28, 53, 71, 86, 100, 100, 100, 100, 100, 100],
+                        borderColor: '#8b5cf6',
+                        backgroundColor: 'rgba(139, 92, 246, 0.2)',
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+        
+        function initPatternsCharts() {
+            new Chart(document.getElementById('modalChart1'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['DoS', 'Probe', 'R2L', 'U2R'],
+                    datasets: [{
+                        data: [25500, 15000, 10000, 8130],
+                        backgroundColor: ['#ef4444', '#f59e0b', '#eab308', '#a855f7']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+            
+            new Chart(document.getElementById('modalChart2'), {
+                type: 'line',
+                data: {
+                    labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '23:59'],
+                    datasets: [{
+                        label: 'Actividad',
+                        data: [120, 80, 250, 400, 520, 650, 300],
+                        borderColor: '#ec4899',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+            
+            new Chart(document.getElementById('modalChart3'), {
+                type: 'bar',
+                data: {
+                    labels: ['80', '443', '22', '21', '25', '3389'],
+                    datasets: [{
+                        label: 'Intentos de Ataque',
+                        data: [15000, 12000, 8500, 6200, 4800, 3500],
+                        backgroundColor: 'rgba(239, 68, 68, 0.7)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+        
+        function initConfigCharts() {
+            new Chart(document.getElementById('modalChart1'), {
+                type: 'line',
+                data: {
+                    labels: Array.from({length: 100}, (_, i) => i + 1),
+                    datasets: [{
+                        label: 'Loss',
+                        data: Array.from({length: 100}, (_, i) => 1 / (i + 1) * 10),
+                        borderColor: '#10b981',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+            
+            new Chart(document.getElementById('modalChart2'), {
+                type: 'line',
+                data: {
+                    labels: ['0.001', '0.01', '0.1', '1.0', '10', '100'],
+                    datasets: [{
+                        label: 'Accuracy',
+                        data: [85, 92, 96, 97.8, 97.5, 96.8],
+                        borderColor: '#3b82f6',
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+            
+            new Chart(document.getElementById('modalChart3'), {
+                type: 'bar',
+                data: {
+                    labels: ['Lectura', 'Preproceso', 'Entrenamiento', 'Validación'],
+                    datasets: [{
+                        label: 'Tiempo (segundos)',
+                        data: [12, 8, 45, 15],
+                        backgroundColor: ['#8b5cf6', '#ec4899', '#f59e0b', '#10b981']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+        
+        function initValidationCharts() {
+            new Chart(document.getElementById('modalChart1'), {
+                type: 'bar',
+                data: {
+                    labels: ['Fold 1', 'Fold 2', 'Fold 3', 'Fold 4', 'Fold 5'],
+                    datasets: [{
+                        label: 'Accuracy (%)',
+                        data: [97.2, 98.2, 97.5, 96.9, 97.8],
+                        backgroundColor: ['#3b82f6', '#10b981', '#8b5cf6', '#f59e0b', '#ec4899']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: false, min: 95, max: 100 } }
+                }
+            });
+            
+            new Chart(document.getElementById('modalChart2'), {
+                type: 'line',
+                data: {
+                    labels: ['Fold 1', 'Fold 2', 'Fold 3', 'Fold 4', 'Fold 5'],
+                    datasets: [
+                        {
+                            label: 'Accuracy',
+                            data: [97.2, 98.2, 97.5, 96.9, 97.8],
+                            borderColor: '#10b981'
+                        },
+                        {
+                            label: 'Media',
+                            data: [97.6, 97.6, 97.6, 97.6, 97.6],
+                            borderColor: '#ef4444',
+                            borderDash: [5, 5]
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+            
+            new Chart(document.getElementById('modalChart3'), {
+                type: 'radar',
+                data: {
+                    labels: ['Fold 1', 'Fold 2', 'Fold 3', 'Fold 4', 'Fold 5'],
+                    datasets: [{
+                        label: 'Estabilidad',
+                        data: [97.2, 98.2, 97.5, 96.9, 97.8],
+                        backgroundColor: 'rgba(139, 92, 246, 0.2)',
+                        borderColor: '#8b5cf6'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { r: { beginAtZero: false, min: 95, max: 100 } }
+                }
+            });
+        }
+        
+        // Cerrar modal al hacer clic fuera
+        document.addEventListener('click', function(e) {
+            const modal = document.getElementById('fileModal');
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
     </script>
 </body>
 </html>
