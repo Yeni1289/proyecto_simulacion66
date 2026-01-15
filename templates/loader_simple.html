@@ -192,6 +192,89 @@
             background: rgba(251, 191, 36, 0.1);
             border: 1px solid rgba(251, 191, 36, 0.3);
         }
+
+        .drop-zone {
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px dashed rgba(167, 139, 250, 0.4);
+            border-radius: 12px;
+            padding: 60px 40px;
+            text-align: center;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .drop-zone:hover,
+        .drop-zone.drag-over {
+            background: rgba(167, 139, 250, 0.1);
+            border-color: #a78bfa;
+            transform: translateY(-3px);
+        }
+
+        .drop-zone-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .drop-zone-title {
+            color: white;
+            font-size: 1.5em;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .drop-zone-text {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+
+        .drop-zone-button {
+            display: inline-block;
+            padding: 14px 35px;
+            background: #a78bfa;
+            color: white;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .drop-zone-button:hover {
+            background: #8b5cf6;
+            transform: translateY(-2px);
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .or-divider {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 1.1em;
+            font-weight: 600;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .or-divider::before,
+        .or-divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 40%;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .or-divider::before {
+            left: 0;
+        }
+
+        .or-divider::after {
+            right: 0;
+        }
     </style>
 </head>
 <body>
@@ -200,6 +283,16 @@
             <h1>📊 Notebook Viewer</h1>
             <p class="description">Sistema de visualización interactiva para análisis de Machine Learning</p>
         </div>
+
+        <div class="drop-zone" id="dropZone">
+            <div class="drop-zone-icon">📁</div>
+            <div class="drop-zone-title">Arrastra tu carpeta aquí</div>
+            <div class="drop-zone-text">o haz clic para seleccionar archivos .ipynb</div>
+            <div class="drop-zone-button">Seleccionar Archivos</div>
+            <input type="file" id="fileInput" accept=".ipynb" multiple>
+        </div>
+
+        <div class="or-divider">O</div>
 
         <div class="search-box">
             <label class="search-label">Ingresa la ruta completa de tu carpeta de notebooks:</label>
@@ -219,6 +312,92 @@
 
     <script>
         console.log('✅ Página cargada');
+
+        // Drag and Drop
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+
+        dropZone.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('drag-over');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('drag-over');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('drag-over');
+            
+            const files = Array.from(e.dataTransfer.files).filter(f => f.name.endsWith('.ipynb'));
+            if (files.length > 0) {
+                procesarArchivos(files);
+            } else {
+                alert('⚠️ Por favor arrastra archivos .ipynb');
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const files = Array.from(e.target.files);
+            if (files.length > 0) {
+                procesarArchivos(files);
+            }
+        });
+
+        async function procesarArchivos(files) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = '<div class="loading-message">⏳ Procesando notebooks...</div>';
+
+            try {
+                let html = `<h3 class="result-header">✅ ${files.length} notebook${files.length > 1 ? 's' : ''} cargado${files.length > 1 ? 's' : ''}:</h3><div class="notebook-list">`;
+                
+                for (const file of files) {
+                    const reader = new FileReader();
+                    const content = await new Promise((resolve) => {
+                        reader.onload = (e) => resolve(e.target.result);
+                        reader.readAsText(file);
+                    });
+
+                    const formData = new FormData();
+                    formData.append('notebook_content', content);
+                    formData.append('notebook_name', file.name);
+
+                    const response = await fetch('/api/upload-notebook/', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        html += `
+                            <div class="notebook-item">
+                                <div class="notebook-info">
+                                    <div class="notebook-name">📓 ${file.name}</div>
+                                    <div class="notebook-path">Cargado desde tu computadora</div>
+                                </div>
+                                <button onclick="window.location.href='/notebook/${data.slug}/'">
+                                    Abrir
+                                </button>
+                            </div>
+                        `;
+                    }
+                }
+                
+                html += '</div>';
+                resultDiv.innerHTML = html;
+                
+            } catch (error) {
+                console.error('❌ Error:', error);
+                resultDiv.innerHTML = `<div class="error-message">❌ Error: ${error.message}</div>`;
+            }
+        }
         
         async function buscarNotebooks() {
             console.log('🔘 buscarNotebooks() ejecutado');

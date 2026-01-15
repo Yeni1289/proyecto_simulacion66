@@ -6,5 +6,6 @@ urlpatterns = [
     path('browse/', views.browse_notebooks, name='browse'),
     path('api/scan-folder/', views.scan_folder, name='scan_folder'),
     path('api/process-notebook/', views.process_notebook, name='process_notebook'),
+    path('api/upload-notebook/', views.upload_notebook, name='upload_notebook'),
     path('notebook/<str:slug>/', views.notebook_detail, name='notebook_detail'),
 ]

@@ -236,6 +236,107 @@ def process_notebook(request):
         })
 
 
+@csrf_exempt
+@require_http_methods(["POST"])
+def upload_notebook(request):
+    """API para cargar notebooks desde archivos subidos por el usuario"""
+    try:
+        notebook_content = request.POST.get('notebook_content', '')
+        notebook_name = request.POST.get('notebook_name', 'untitled.ipynb')
+        
+        if not notebook_content:
+            return JsonResponse({
+                'success': False,
+                'error': 'No se proporcionó contenido del notebook'
+            })
+        
+        if not nb_read:
+            return JsonResponse({
+                'success': False,
+                'error': 'nbformat no está instalado'
+            })
+        
+        # Parsear el contenido del notebook
+        import io
+        nb = nb_read(io.StringIO(notebook_content), as_version=NO_CONVERT)
+        
+        slug = Path(notebook_name).stem
+        static_dir = STATIC_NOTES_DIR / slug
+        static_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Extraer contenido importante
+        items = []
+        img_counter = 0
+        
+        for cell in nb.cells:
+            # Markdown
+            if cell.cell_type == 'markdown':
+                content = ''.join(cell.source) if isinstance(cell.source, list) else cell.source
+                if content.strip() and (len(content) > 20 or content.startswith('#')):
+                    items.append({
+                        'type': 'markdown',
+                        'content': content
+                    })
+            
+            # Code cells - solo outputs importantes
+            elif cell.cell_type == 'code' and hasattr(cell, 'outputs'):
+                for output in cell.outputs:
+                    # Imágenes
+                    if hasattr(output, 'data'):
+                        if 'image/png' in output.data:
+                            img_counter += 1
+                            img_filename = f'viz_{img_counter}.png'
+                            img_path = static_dir / img_filename
+                            
+                            img_data = base64.b64decode(output.data['image/png'])
+                            img_path.write_bytes(img_data)
+                            
+                            items.append({
+                                'type': 'image',
+                                'content': f'/static/notebooks/{slug}/{img_filename}',
+                                'index': img_counter
+                            })
+                        
+                        # Tablas HTML
+                        elif 'text/html' in output.data:
+                            html_content = ''.join(output.data['text/html']) if isinstance(output.data['text/html'], list) else output.data['text/html']
+                            if 'table' in html_content.lower() or 'dataframe' in html_content.lower():
+                                items.append({
+                                    'type': 'table',
+                                    'content': html_content
+                                })
+                    
+                    # Texto de salida
+                    elif hasattr(output, 'text'):
+                        text = ''.join(output.text) if isinstance(output.text, list) else output.text
+                        if text.strip() and len(text) < 5000:
+                            if any(keyword in text.lower() for keyword in ['accuracy', 'score', 'result', 'mean', 'std', 'count', ':']):
+                                items.append({
+                                    'type': 'output',
+                                    'content': text
+                                })
+        
+        # Guardar JSON
+        json_path = TEMPLATES_NOTES_DIR / f'{slug}.json'
+        with open(json_path, 'w', encoding='utf-8') as f:
+            json.dump(items, f, ensure_ascii=False, indent=2)
+        
+        return JsonResponse({
+            'success': True,
+            'slug': slug,
+            'items_count': len(items),
+            'images_count': img_counter
+        })
+        
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return JsonResponse({
+            'success': False,
+            'error': str(e)
+        })
+
+
 def notebook_detail(request, slug):
     """Vista detallada del notebook procesado"""
     json_path = TEMPLATES_NOTES_DIR / f'{slug}.json'
