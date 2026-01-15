@@ -3,313 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEUROLYTICS LAB - Sistema de Análisis Avanzado</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+    <title>Cargando Dataset</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/app.css">
     <style>
-        /* Estilos inline para asegurar que funcione */
-        .test-btn {
-            background: #28a745 !important;
-            margin-left: 10px;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #a7f3d0 0%, #6ee7b7 50%, #34d399 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        /* Animación de Ondas Líquidas */
+        .wave-container {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        .wave {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.3), transparent);
+            animation: wave 8s ease-in-out infinite;
+        }
+        .wave:nth-child(2) {
+            background: radial-gradient(circle, rgba(52, 211, 153, 0.3), transparent);
+            animation-delay: -2s;
+            animation-duration: 10s;
+        }
+        .wave:nth-child(3) {
+            background: radial-gradient(circle, rgba(110, 231, 183, 0.3), transparent);
+            animation-delay: -4s;
+            animation-duration: 12s;
+        }
+        @keyframes wave {
+            0%, 100% { 
+                transform: translate(-25%, -25%) scale(1) rotate(0deg);
+                border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            }
+            50% { 
+                transform: translate(-30%, -30%) scale(1.1) rotate(180deg);
+                border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%;
+            }
+        }
+        
+        /* Contenido Principal */
+        .loader-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 60px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            box-shadow: 0 25px 70px rgba(16, 185, 129, 0.4);
+            max-width: 600px;
+            animation: float 4s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .logo {
+            font-size: 6em;
+            margin-bottom: 30px;
+            filter: drop-shadow(0 10px 20px rgba(16, 185, 129, 0.3));
+            animation: pulse 2s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .title {
+            font-size: 3em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #059669, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+        
+        .subtitle {
+            font-size: 1.5em;
+            color: #047857;
+            margin-bottom: 40px;
+        }
+        
+        /* Spinner Moderno */
+        .spinner-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .spinner-dot {
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, #10b981, #34d399);
+            border-radius: 50%;
+            animation: bounce 1.4s ease-in-out infinite;
+        }
+        .spinner-dot:nth-child(1) { animation-delay: -0.32s; }
+        .spinner-dot:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(16, 185, 129, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981, #34d399, #6ee7b7);
+            border-radius: 10px;
+            animation: progress 2s ease-in-out infinite;
+        }
+        @keyframes progress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+        
+        .status-text {
+            font-size: 1.2em;
+            color: #059669;
+            font-weight: 600;
         }
     </style>
 </head>
-<body class="loader-page">
-    <div class="app-container">
-        <!-- Animated Background -->
-        <div class="bg-animation">
-            <div class="blob blob-1"></div>
-            <div class="blob blob-2"></div>
-            <div class="blob blob-3"></div>
-        </div>
-
-        <!-- Main Content -->
-        <div class="loader-content">
-            <div class="loader-header">
-                <div class="app-logo">
-                    <div class="logo-icon">⚡</div>
-                    <div class="logo-text">
-                        <h1>NEUROLYTICS LAB</h1>
-                        <p>SISTEMA DE ANÁLISIS PREDICTIVO</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="loader-card">
-                <div class="card-header">
-                    <h2>INICIAR ESCANEO</h2>
-                    <p>Configurar directorio de datasets para procesamiento neuronal</p>
-                </div>
-
-                <div class="card-body">
-                    <!-- Path Input -->
-                    <div class="path-input-group">
-                        <div class="input-wrapper">
-                            <span class="input-icon">�️</span>
-                            <input 
-                                type="text" 
-                                id="folderPath" 
-                                class="path-input"
-                                placeholder="C:\Users\yanet\Downloads\proyecto-simulacion-ml-main\datasets"
-                                value="{{ last_path }}"
-                            >
-                        </div>
-                        <button class="scan-btn" id="scanBtn">
-                            <span class="btn-icon">🔎</span>
-                            <span class="btn-text">Explorar Carpeta</span>
-                        </button>
-                        <button class="scan-btn test-btn" id="testBtn">
-                            <span class="btn-icon">✨</span>
-                            <span class="btn-text">Demo</span>
-                        </button>
-                    </div>
-
-                    <!-- Recent Paths -->
-                    {% if last_path %}
-                    <div class="recent-section">
-                        <div class="recent-label">📍 REGISTRO HISTÓRICO:</div>
-                        <div class="recent-path" id="recentPath">
-                            <span class="recent-icon">🕒</span>
-                            <span class="recent-text">{{ last_path }}</span>
-                        </div>
-                    </div>
-                    {% endif %}
-                </div>
-            </div>
-
-            <!-- Results Section -->
-            <div class="results-section" id="resultsSection" style="display: none;">
-                <div class="results-header">
-                    <h3>📊 Datasets Disponibles</h3>
-                    <span class="results-count" id="resultsCount">0</span>
-                </div>
-                <div class="notebooks-grid" id="notebooksGrid"></div>
-            </div>
-        </div>
-
-        <!-- Loading Overlay -->
-        <div class="loading-overlay" id="loadingOverlay">
-            <div class="loading-spinner"></div>
-            <div class="loading-text">Procesando...</div>
-        </div>
-
-        <!-- Toast Notifications -->
-        <div id="toastContainer" class="toast-container"></div>
+<body>
+    <div class="wave-container">
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
     </div>
-
-    <script>
-        console.log('✅ Script cargado');
+    
+    <div class="loader-content">
+        <div class="logo">📊</div>
+        <h1 class="title">Cargando Dataset</h1>
+        <p class="subtitle">Preparando visualizaciones interactivas</p>
         
-        // TEST: Verificar que el DOM está listo
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('✅ DOM listo');
-            
-            const scanBtn = document.getElementById('scanBtn');
-            const testBtn = document.getElementById('testBtn');
-            const folderPath = document.getElementById('folderPath');
-            
-            console.log('🔍 Botón scanBtn:', scanBtn ? 'ENCONTRADO' : 'NO ENCONTRADO');
-            console.log('🔍 Botón testBtn:', testBtn ? 'ENCONTRADO' : 'NO ENCONTRADO');
-            console.log('🔍 Input folderPath:', folderPath ? 'ENCONTRADO' : 'NO ENCONTRADO');
-            
-            // Test button - Verificar que los eventos funcionan
-            if (testBtn) {
-                testBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    console.log('✅ TEST: ¡El botón funciona!');
-                    alert('✅ ¡El botón funciona! Los eventos están correctos.');
-                });
-            }
-            
-            // Scan button
-            if (scanBtn) {
-                scanBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    console.log('🔘 Click en Buscar archivos');
-                    scanFolder();
-                });
-            }
-            
-            // Enter key
-            if (folderPath) {
-                folderPath.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        console.log('⌨️ Enter presionado');
-                        scanFolder();
-                    }
-                });
-            }
-            
-            // Recent path click
-            const recentPath = document.getElementById('recentPath');
-            if (recentPath) {
-                recentPath.addEventListener('click', function() {
-                    const path = '{{ last_path }}';
-                    document.getElementById('folderPath').value = path;
-                    scanFolder();
-                });
-            }
-        });
+        <div class="spinner-container">
+            <div class="spinner-dot"></div>
+            <div class="spinner-dot"></div>
+            <div class="spinner-dot"></div>
+        </div>
         
-        // Scan Folder Function
-        async function scanFolder() {
-            console.log('📞 scanFolder() llamada');
-            
-            const path = document.getElementById('folderPath').value.trim();
-            console.log('📁 Ruta ingresada:', path);
-            
-            if (!path) {
-                alert('❌ Por favor ingresa una ruta');
-                showToast('Por favor ingresa una ruta', 'error');
-                return;
-            }
-
-            showLoading(true);
-
-            try {
-                const formData = new FormData();
-                formData.append('folder_path', path);
-
-                console.log('📤 Enviando petición POST a /api/scan-folder/');
-                
-                const response = await fetch('/api/scan-folder/', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                console.log('📥 Respuesta recibida:', response.status, response.statusText);
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
-                
-                const data = await response.json();
-                console.log('📊 Datos recibidos:', data);
-
-                if (data.success) {
-                    console.log(`✅ ${data.notebooks.length} notebooks encontrados`);
-                    displayNotebooks(data.notebooks);
-                    showToast(`✓ ${data.notebooks.length} notebooks encontrados`, 'success');
-                } else {
-                    console.error('❌ Error del servidor:', data.error);
-                    showToast('Error: ' + data.error, 'error');
-                    alert('❌ Error: ' + data.error);
-                }
-            } catch (error) {
-                console.error('❌ Error de conexión:', error);
-                showToast('Error: ' + error.message, 'error');
-                alert('❌ Error de conexión:\n' + error.message + '\n\nVerifica la consola (F12) para más detalles.');
-            } finally {
-                showLoading(false);
-            }
-        }
-
-        // Display Notebooks
-        function displayNotebooks(notebooks) {
-            console.log('📋 displayNotebooks() llamada con', notebooks.length, 'notebooks');
-            
-            const resultsSection = document.getElementById('resultsSection');
-            const notebooksGrid = document.getElementById('notebooksGrid');
-            const resultsCount = document.getElementById('resultsCount');
-
-            resultsSection.style.display = 'block';
-            resultsCount.textContent = notebooks.length;
-            notebooksGrid.innerHTML = '';
-
-            notebooks.forEach(nb => {
-                const card = document.createElement('div');
-                card.className = 'notebook-card';
-                card.innerHTML = `
-                    <div class="notebook-icon">📓</div>
-                    <div class="notebook-info">
-                        <h4>${nb.name}</h4>
-                        <p>${formatFileSize(nb.size)}</p>
-                    </div>
-                    <button class="open-btn" onclick="openNotebook('${escapeHtml(nb.path)}', '${nb.slug}')">
-                        Abrir
-                    </button>
-                `;
-                notebooksGrid.appendChild(card);
-            });
-
-            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
-
-        // Open Notebook
-        async function openNotebook(path, slug) {
-            showLoading(true, 'Procesando notebook...');
-
-            try {
-                const formData = new FormData();
-                formData.append('notebook_path', path);
-
-                const response = await fetch('/api/process-notebook/', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    showToast(`✓ Notebook procesado`, 'success');
-                    setTimeout(() => {
-                        window.location.href = `/notebook/${slug}/`;
-                    }, 500);
-                } else {
-                    showToast('Error: ' + data.error, 'error');
-                    showLoading(false);
-                }
-            } catch (error) {
-                showToast('Error: ' + error.message, 'error');
-                showLoading(false);
-            }
-        }
-
-        // Utilities
-        function showLoading(show, text = 'Procesando...') {
-            const overlay = document.getElementById('loadingOverlay');
-            if (overlay) {
-                const loadingText = overlay.querySelector('.loading-text');
-                if (loadingText) loadingText.textContent = text;
-                overlay.style.display = show ? 'flex' : 'none';
-            }
-        }
-
-        function showToast(message, type = 'info') {
-            const container = document.getElementById('toastContainer');
-            if (!container) return;
-            
-            const toast = document.createElement('div');
-            toast.className = `toast toast-${type}`;
-            toast.textContent = message;
-            container.appendChild(toast);
-
-            setTimeout(() => toast.classList.add('show'), 10);
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => {
-                    if (container.contains(toast)) {
-                        container.removeChild(toast);
-                    }
-                }, 300);
-            }, 3000);
-        }
-
-        function formatFileSize(bytes) {
-            if (bytes < 1024) return bytes + ' B';
-            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
-        }
-
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
         
-        console.log('✅ Todas las funciones definidas');
-    </script>
+        <p class="status-text">Procesando datos...</p>
+    </div>
 </body>
 </html>

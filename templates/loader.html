@@ -8,10 +8,94 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/app.css">
     <style>
-        /* Estilos inline para asegurar que funcione */
+        /* Estilos inline verde tema coherente */
+        body.loader-page {
+            background: linear-gradient(135deg, #a7f3d0 0%, #6ee7b7 50%, #34d399 100%) !important;
+        }
+        .bg-animation {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 50%, #6ee7b7 100%) !important;
+        }
+        .blob {
+            filter: blur(60px);
+            opacity: 0.6;
+        }
+        .blob-1 {
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.4), transparent) !important;
+        }
+        .blob-2 {
+            background: radial-gradient(circle, rgba(52, 211, 153, 0.4), transparent) !important;
+        }
+        .blob-3 {
+            background: radial-gradient(circle, rgba(110, 231, 183, 0.4), transparent) !important;
+        }
+        .loader-card {
+            background: rgba(255, 255, 255, 0.95) !important;
+            border: 2px solid rgba(16, 185, 129, 0.3) !important;
+            box-shadow: 0 20px 60px rgba(16, 185, 129, 0.3) !important;
+        }
+        .card-header h2 {
+            color: #059669 !important;
+        }
+        .card-header p {
+            color: #047857 !important;
+        }
+        .path-input {
+            border: 2px solid rgba(16, 185, 129, 0.3) !important;
+            color: #064e3b !important;
+        }
+        .path-input:focus {
+            border-color: #10b981 !important;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1) !important;
+        }
+        .scan-btn {
+            background: linear-gradient(135deg, #10b981, #059669) !important;
+            border: none !important;
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3) !important;
+        }
+        .scan-btn:hover {
+            background: linear-gradient(135deg, #059669, #047857) !important;
+            box-shadow: 0 12px 30px rgba(5, 150, 105, 0.5) !important;
+        }
         .test-btn {
-            background: #28a745 !important;
+            background: linear-gradient(135deg, #34d399, #10b981) !important;
             margin-left: 10px;
+        }
+        .notebook-card {
+            background: rgba(255, 255, 255, 0.95) !important;
+            border: 2px solid rgba(16, 185, 129, 0.2) !important;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2) !important;
+        }
+        .notebook-card:hover {
+            border-color: #10b981 !important;
+            box-shadow: 0 15px 40px rgba(5, 150, 105, 0.3) !important;
+        }
+        .open-btn {
+            background: linear-gradient(135deg, #10b981, #059669) !important;
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3) !important;
+        }
+        .loading-overlay {
+            background: rgba(209, 250, 229, 0.95) !important;
+        }
+        .loading-spinner {
+            border: 4px solid rgba(16, 185, 129, 0.2) !important;
+            border-top-color: #10b981 !important;
+        }
+        .loading-text {
+            color: #059669 !important;
+        }
+        .app-logo h1 {
+            background: linear-gradient(135deg, #059669, #10b981) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+        }
+        .app-logo p {
+            color: #047857 !important;
+        }
+        .results-header h3 {
+            color: #059669 !important;
+        }
+        .results-count {
+            background: linear-gradient(135deg, #10b981, #34d399) !important;
         }
     </style>
 </head>
@@ -234,7 +318,11 @@
                         <h4>${nb.name}</h4>
                         <p>${formatFileSize(nb.size)}</p>
                     </div>
-                    <button class="open-btn" onclick="openNotebook('${escapeHtml(nb.path)}', '${nb.slug}')">
+                    <button 
+                        class="open-btn" 
+                        data-path="${nb.path}"
+                        data-slug="${nb.slug}"
+                        onclick="openNotebook(this.dataset.path, this.dataset.slug)">
                         Abrir
                     </button>
                 `;

@@ -3,494 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notebook Viewer - Simple</title>
+    <title>Cargando...</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 50%, #6ee7b7 100%);
             min-height: 100vh;
-            background: linear-gradient(135deg, #1e1b4b 0%, #2d1b69 50%, #3f2c70 100%);
-            padding: 40px 20px;
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .header-section {
-            text-align: center;
-            margin-bottom: 50px;
-            padding: 40px 20px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-        }
-
-        h1 {
-            font-size: 3.5em;
-            font-weight: 900;
-            background: linear-gradient(135deg, #a78bfa 0%, #c4b5fd 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 15px;
-        }
-
-        .description {
-            font-size: 1.1em;
-            color: rgba(255, 255, 255, 0.7);
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .search-box {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 40px;
-            margin-bottom: 30px;
-        }
-
-        .search-label {
-            color: white;
-            font-size: 1.2em;
-            font-weight: 600;
-            margin-bottom: 15px;
-            display: block;
-        }
-
-        input[type="text"] {
-            width: 100%;
-            padding: 16px 20px;
-            font-size: 1.1em;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            color: white;
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
-        }
-
-        input[type="text"]:focus {
-            outline: none;
-            border-color: #a78bfa;
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        input[type="text"]::placeholder {
-            color: rgba(255, 255, 255, 0.4);
-        }
-
-        button {
-            padding: 16px 40px;
-            font-size: 1.1em;
-            font-weight: 600;
-            background: #a78bfa;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-        }
-
-        button:hover {
-            transform: translateY(-3px);
-            background: #8b5cf6;
-        }
-
-        #result {
-            display: none;
-            margin-top: 30px;
-        }
-
-        .result-header {
-            color: white;
-            font-size: 1.8em;
-            font-weight: 700;
-            margin-bottom: 20px;
-        }
-
-        .notebook-list {
-            display: grid;
-            gap: 15px;
-        }
-
-        .notebook-item {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 25px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            gap: 20px;
-            transition: all 0.3s ease;
+            justify-content: center;
+            overflow: hidden;
         }
-
-        .notebook-item:hover {
-            transform: translateY(-3px);
-            background: rgba(255, 255, 255, 0.05);
-            border-color: #a78bfa;
+        
+        /* Fondo Animado Minimalista */
+        .bg-circles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
         }
-
-        .notebook-info {
-            flex: 1;
+        .circle {
+            position: absolute;
+            border: 2px solid rgba(16, 185, 129, 0.2);
+            border-radius: 50%;
+            animation: expand 4s ease-out infinite;
         }
-
-        .notebook-name {
-            font-size: 1.3em;
-            font-weight: 600;
-            color: white;
-            margin-bottom: 8px;
+        .circle:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
-
-        .notebook-path {
-            font-size: 0.9em;
-            color: rgba(255, 255, 255, 0.5);
-            word-break: break-all;
+        .circle:nth-child(2) {
+            width: 500px;
+            height: 500px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: 1s;
         }
-
-        .notebook-item button {
-            padding: 12px 30px;
-            width: auto;
-            background: #a78bfa;
-            font-size: 1em;
+        .circle:nth-child(3) {
+            width: 700px;
+            height: 700px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: 2s;
         }
-
-        .notebook-item button:hover {
-            transform: translateY(-2px);
-            background: #8b5cf6;
+        @keyframes expand {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0;
+            }
         }
-
-        .loading-message,
-        .error-message,
-        .empty-message {
-            padding: 30px;
-            border-radius: 12px;
+        
+        /* Contenedor Central */
+        .loader-wrapper {
+            position: relative;
+            z-index: 10;
             text-align: center;
-            font-size: 1.2em;
-            color: white;
         }
-
-        .loading-message {
-            background: rgba(167, 139, 250, 0.1);
-            border: 1px solid rgba(167, 139, 250, 0.3);
-        }
-
-        .error-message {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-        }
-
-        .empty-message {
-            background: rgba(251, 191, 36, 0.1);
-            border: 1px solid rgba(251, 191, 36, 0.3);
-        }
-
-        .drop-zone {
-            background: rgba(255, 255, 255, 0.03);
-            border: 2px dashed rgba(167, 139, 250, 0.4);
-            border-radius: 12px;
-            padding: 60px 40px;
-            text-align: center;
-            margin-bottom: 30px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .drop-zone:hover,
-        .drop-zone.drag-over {
-            background: rgba(167, 139, 250, 0.1);
-            border-color: #a78bfa;
-            transform: translateY(-3px);
-        }
-
-        .drop-zone-icon {
-            font-size: 4em;
-            margin-bottom: 20px;
-        }
-
-        .drop-zone-title {
-            color: white;
-            font-size: 1.5em;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-
-        .drop-zone-text {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 1.1em;
-            margin-bottom: 20px;
-        }
-
-        .drop-zone-button {
-            display: inline-block;
-            padding: 14px 35px;
-            background: #a78bfa;
-            color: white;
-            border-radius: 8px;
-            font-weight: 600;
-            margin-top: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .drop-zone-button:hover {
-            background: #8b5cf6;
-            transform: translateY(-2px);
-        }
-
-        input[type="file"] {
-            display: none;
-        }
-
-        .or-divider {
-            text-align: center;
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 1.1em;
-            font-weight: 600;
-            margin: 30px 0;
+        
+        /* Spinner Circular Minimalista */
+        .spinner {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 40px;
             position: relative;
         }
-
-        .or-divider::before,
-        .or-divider::after {
-            content: '';
+        .spinner-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 4px solid transparent;
+            border-top-color: #10b981;
+            border-radius: 50%;
+            animation: spin 1.5s linear infinite;
+        }
+        .spinner-ring:nth-child(2) {
+            border-top-color: #34d399;
+            animation-delay: -0.5s;
+            width: 80%;
+            height: 80%;
+            top: 10%;
+            left: 10%;
+        }
+        .spinner-ring:nth-child(3) {
+            border-top-color: #6ee7b7;
+            animation-delay: -1s;
+            width: 60%;
+            height: 60%;
+            top: 20%;
+            left: 20%;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .spinner-icon {
             position: absolute;
             top: 50%;
-            width: 40%;
-            height: 1px;
-            background: rgba(255, 255, 255, 0.2);
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2.5em;
+            animation: pulse 2s ease-in-out infinite;
         }
-
-        .or-divider::before {
-            left: 0;
+        @keyframes pulse {
+            0%, 100% { 
+                transform: translate(-50%, -50%) scale(1); 
+                opacity: 1;
+            }
+            50% { 
+                transform: translate(-50%, -50%) scale(1.2); 
+                opacity: 0.7;
+            }
         }
-
-        .or-divider::after {
-            right: 0;
+        
+        .loading-text {
+            font-size: 2em;
+            font-weight: 700;
+            color: #059669;
+            margin-bottom: 15px;
+        }
+        
+        .loading-subtext {
+            font-size: 1.2em;
+            color: #047857;
+            font-weight: 500;
+        }
+        
+        /* Dots Animados */
+        .dots {
+            display: inline-block;
+        }
+        .dots span {
+            animation: blink 1.4s infinite;
+        }
+        .dots span:nth-child(2) { animation-delay: 0.2s; }
+        .dots span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes blink {
+            0%, 20%, 100% { opacity: 0; }
+            50% { opacity: 1; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header-section">
-            <h1>📊 Notebook Viewer</h1>
-            <p class="description">Sistema de visualización interactiva para análisis de Machine Learning</p>
-        </div>
-
-        <div class="drop-zone" id="dropZone">
-            <div class="drop-zone-icon">📁</div>
-            <div class="drop-zone-title">Arrastra tu Archivo aquí</div>
-            <div class="drop-zone-text">o haz clic para seleccionar archivos .ipynb</div>
-            <div class="drop-zone-button">Seleccionar Archivos</div>
-            <input type="file" id="fileInput" accept=".ipynb" multiple>
-        </div>
-
-        <div class="or-divider">O</div>
-
-        <div class="search-box">
-            <label class="search-label">Ingresa la ruta completa de tu carpeta de los archivos:</label>
-            
-            <input 
-                type="text" 
-                id="folderPath" 
-                placeholder="C:\Users\yanet\Downloads\proyecto-simulacion-ml-main\datasets"
-                value="C:\Users\yanet\Downloads\proyecto-simulacion-ml-main\datasets"
-            >
-            
-            <button onclick="buscarArchivos()">🔍 Buscar archivos</button>
-        </div>
-        
-        <div id="result"></div>
+    <div class="bg-circles">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
     </div>
-
-    <script>
-        console.log('✅ Página cargada');
-
-        // Drag and Drop
-        const dropZone = document.getElementById('dropZone');
-        const fileInput = document.getElementById('fileInput');
-
-        dropZone.addEventListener('click', () => {
-            fileInput.click();
-        });
-
-        dropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dropZone.classList.add('drag-over');
-        });
-
-        dropZone.addEventListener('dragleave', () => {
-            dropZone.classList.remove('drag-over');
-        });
-
-        dropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropZone.classList.remove('drag-over');
-            
-            const files = Array.from(e.dataTransfer.files).filter(f => f.name.endsWith('.ipynb'));
-            if (files.length > 0) {
-                procesarArchivos(files);
-            } else {
-                alert('⚠️ Por favor arrastra archivos .ipynb');
-            }
-        });
-
-        fileInput.addEventListener('change', (e) => {
-            const files = Array.from(e.target.files);
-            if (files.length > 0) {
-                procesarArchivos(files);
-            }
-        });
-
-        async function procesarArchivos(files) {
-            const resultDiv = document.getElementById('result');
-            resultDiv.style.display = 'block';
-            resultDiv.innerHTML = '<div class="loading-message">⏳ Procesando notebooks...</div>';
-
-            try {
-                let html = `<h3 class="result-header">✅ ${files.length} notebook${files.length > 1 ? 's' : ''} cargado${files.length > 1 ? 's' : ''}:</h3><div class="notebook-list">`;
-                
-                for (const file of files) {
-                    const reader = new FileReader();
-                    const content = await new Promise((resolve) => {
-                        reader.onload = (e) => resolve(e.target.result);
-                        reader.readAsText(file);
-                    });
-
-                    const formData = new FormData();
-                    formData.append('notebook_content', content);
-                    formData.append('notebook_name', file.name);
-
-                    const response = await fetch('/api/upload-notebook/', {
-                        method: 'POST',
-                        body: formData
-                    });
-
-                    const data = await response.json();
-
-                    if (data.success) {
-                        html += `
-                            <div class="notebook-item">
-                                <div class="notebook-info">
-                                    <div class="notebook-name">📓 ${file.name}</div>
-                                    <div class="notebook-path">Cargado desde tu computadora</div>
-                                </div>
-                                <button onclick="window.location.href='/notebook/${data.slug}/'">
-                                    Abrir
-                                </button>
-                            </div>
-                        `;
-                    }
-                }
-                
-                html += '</div>';
-                resultDiv.innerHTML = html;
-                
-            } catch (error) {
-                console.error('❌ Error:', error);
-                resultDiv.innerHTML = `<div class="error-message">❌ Error: ${error.message}</div>`;
-            }
-        }
-        
-        async function buscarNotebooks() {
-            console.log('🔘 buscarNotebooks() ejecutado');
-            
-            const ruta = document.getElementById('folderPath').value.trim();
-            console.log('📁 Ruta:', ruta);
-            
-            if (!ruta) {
-                alert('❌ Por favor ingresa una ruta');
-                return;
-            }
-            
-            const resultDiv = document.getElementById('result');
-            resultDiv.style.display = 'block';
-            resultDiv.innerHTML = '<div class="loading-message">⏳ Buscando notebooks...</div>';
-            
-            try {
-                const formData = new FormData();
-                formData.append('folder_path', ruta);
-                
-                console.log('📤 Enviando petición...');
-                
-                const response = await fetch('/api/scan-folder/', {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                console.log('📥 Respuesta:', response.status);
-                
-                const data = await response.json();
-                console.log('📊 Datos:', data);
-                
-                if (data.success && data.notebooks.length > 0) {
-                    let html = `<h3 class="result-header">✅ ${data.notebooks.length} notebooks encontrados:</h3><div class="notebook-list">`;
-                    
-                    data.notebooks.forEach(nb => {
-                        html += `
-                            <div class="notebook-item">
-                                <div class="notebook-info">
-                                    <div class="notebook-name">📓 ${nb.name}</div>
-                                    <div class="notebook-path">${nb.path}</div>
-                                </div>
-                                <button onclick="abrirNotebook('${nb.path.replace(/\\/g, '\\\\')}', '${nb.slug}')">
-                                    Abrir
-                                </button>
-                            </div>
-                        `;
-                    });
-                    
-                    html += '</div>';
-                    resultDiv.innerHTML = html;
-                } else {
-                    resultDiv.innerHTML = '<div class="empty-message">⚠️ No se encontraron archivos en esta carpeta</div>';
-                }
-                
-            } catch (error) {
-                console.error('❌ Error:', error);
-                resultDiv.innerHTML = `<div class="error-message">❌ Error: ${error.message}<br><br>Verifica que el servidor esté corriendo.</div>`;
-            }
-        }
-        
-        async function abrirNotebook(ruta, slug) {
-            if (!confirm('¿Abrir este notebook?')) return;
-            
-            try {
-                const formData = new FormData();
-                formData.append('notebook_path', ruta);
-                
-                const response = await fetch('/api/process-notebook/', {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    window.location.href = `/notebook/${slug}/`;
-                } else {
-                    alert('Error: ' + data.error);
-                }
-            } catch (error) {
-                alert('Error: ' + error.message);
-            }
-        }
-        
-        // Enter para buscar
-        document.getElementById('folderPath').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                buscarNotebooks();
-            }
-        });
-        
-        console.log('✅ Todo listo');
-    </script>
+    
+    
 </body>
 </html>

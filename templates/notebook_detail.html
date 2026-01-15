@@ -7,6 +7,65 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/app.css">
+    <style>
+        /* Tema verde coherente */
+        body.notebook-page {
+            background: linear-gradient(135deg, #a7f3d0 0%, #6ee7b7 50%, #34d399 100%) !important;
+        }
+        .sidebar {
+            background: rgba(255, 255, 255, 0.95) !important;
+            border-right: 2px solid rgba(16, 185, 129, 0.2) !important;
+        }
+        .sidebar-header {
+            border-bottom: 2px solid rgba(16, 185, 129, 0.1) !important;
+        }
+        .back-link {
+            color: #059669 !important;
+        }
+        .back-link:hover {
+            background: rgba(16, 185, 129, 0.1) !important;
+        }
+        .meta-title {
+            color: #059669 !important;
+        }
+        .nav-btn {
+            color: #047857 !important;
+        }
+        .nav-btn:hover {
+            background: rgba(16, 185, 129, 0.1) !important;
+        }
+        .nav-btn.active {
+            background: linear-gradient(135deg, #10b981, #059669) !important;
+            color: #ffffff !important;
+        }
+        .nav-badge {
+            background: #10b981 !important;
+        }
+        .main-content {
+            background: rgba(255, 255, 255, 0.95) !important;
+        }
+        .section-card {
+            background: rgba(255, 255, 255, 0.98) !important;
+            border: 2px solid rgba(16, 185, 129, 0.2) !important;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2) !important;
+        }
+        .section-card::after {
+            background: linear-gradient(90deg, #10b981, #34d399, #6ee7b7) !important;
+        }
+        .section-title {
+            color: #059669 !important;
+        }
+        .stat-value {
+            color: #10b981 !important;
+        }
+        .action-btn {
+            background: linear-gradient(135deg, #10b981, #059669) !important;
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3) !important;
+        }
+        .action-btn:hover {
+            box-shadow: 0 8px 20px rgba(5, 150, 105, 0.5) !important;
+        }
+    </style>
 </head>
 <body class="notebook-page">
     <div class="app-wrapper">
@@ -66,9 +125,6 @@
             <div class="sidebar-footer">
                 <button class="action-btn" onclick="toggleTheme()">
                     <span>🌙</span> Tema
-                </button>
-                <button class="action-btn" onclick="exportData()">
-                    <span>💾</span> Exportar
                 </button>
             </div>
         </aside>

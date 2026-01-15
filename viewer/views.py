@@ -32,8 +32,8 @@ def loader_view(request):
     from django.middleware.csrf import get_token
     get_token(request)
     
-    # Usar versión simple sin CSS complejo
-    return render(request, 'loader_simple.html', {'last_path': last_path})
+    # Usar la versión principal sin pantalla de carga
+    return render(request, 'loader.html', {'last_path': last_path})
 
 
 def browse_notebooks(request):

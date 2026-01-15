@@ -9,190 +9,345 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #1e1b4b 0%, #2d1b69 50%, #3f2c70 100%);
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #a7f3d0 0%, #6ee7b7 50%, #34d399 100%);
             min-height: 100vh;
-            color: #fff;
-            padding: 40px 20px;
+            color: #064e3b;
+            padding: 20px;
+            perspective: 1500px;
         }
-        .container { max-width: 1400px; margin: 0 auto; }
-        .header {
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(147, 112, 219, 0.3);
-            border-radius: 20px;
-            padding: 50px;
-            margin-bottom: 40px;
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+        .container { 
+            max-width: 1600px; 
+            margin: 0 auto;
+            position: relative;
+        }
+        .hero-section {
             text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85));
+            border-radius: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 20px 60px rgba(16, 185, 129, 0.3);
+            animation: float 6s ease-in-out infinite;
         }
-        .header h1 { font-size: 3.5em; margin-bottom: 15px; font-weight: 900; }
-        .header p { font-size: 1.3em; opacity: 0.8; }
-        .stats-grid {
+        .hero-section h1 { 
+            font-size: 4em; 
+            font-weight: 900; 
+            background: linear-gradient(135deg, #059669, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+        .hero-section p { font-size: 1.5em; color: #047857; }
+        
+        /* Diseño de Cards 3D Flotantes */
+        .cards-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-bottom: 50px;
         }
-        .stat-card {
-            background: rgba(147, 112, 219, 0.2);
-            border: 2px solid rgba(147, 112, 219, 0.4);
-            border-radius: 15px;
-            padding: 30px;
+        .card-3d {
+            background: linear-gradient(145deg, rgba(255,255,255,0.98), rgba(255,255,255,0.92));
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(16, 185, 129, 0.25);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            transform-style: preserve-3d;
+            position: relative;
+            overflow: hidden;
+        }
+        .card-3d::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.1), transparent);
+            animation: rotate 10s linear infinite;
+        }
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .card-3d:hover {
+            transform: translateY(-15px) rotateX(5deg);
+            box-shadow: 0 25px 50px rgba(5, 150, 105, 0.4);
+        }
+        .card-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 5px 15px rgba(16, 185, 129, 0.3));
+        }
+        .card-title {
+            font-size: 1.8em;
+            font-weight: 800;
+            color: #059669;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        .card-value {
+            font-size: 3.5em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #10b981, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Control Deslizante Interactivo */
+        .slider-control {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 50px;
+            margin-bottom: 50px;
+            box-shadow: 0 15px 35px rgba(16, 185, 129, 0.25);
+        }
+        .slider-title {
+            font-size: 2em;
+            font-weight: 800;
+            color: #059669;
+            margin-bottom: 30px;
             text-align: center;
+        }
+        .slider-wrapper {
+            margin: 30px 0;
+        }
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #047857;
+            margin-bottom: 15px;
+        }
+        .custom-slider {
+            width: 100%;
+            height: 12px;
+            border-radius: 6px;
+            background: linear-gradient(to right, #d1fae5, #10b981);
+            outline: none;
+            -webkit-appearance: none;
+        }
+        .custom-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #059669, #10b981);
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
             transition: all 0.3s ease;
         }
-        .stat-card:hover {
-            background: rgba(147, 112, 219, 0.3);
-            border-color: rgba(147, 112, 219, 0.6);
-            transform: translateY(-5px);
+        .custom-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 8px 25px rgba(5, 150, 105, 0.6);
         }
-        .stat-value { font-size: 2.5em; font-weight: 900; color: #a78bfa; margin: 10px 0; }
-        .stat-label { font-size: 0.95em; opacity: 0.8; text-transform: uppercase; letter-spacing: 1px; }
-        .charts-grid {
+        
+        /* Gráficas con Diseño Moderno */
+        .charts-modern {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 30px;
-            margin-bottom: 40px;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 35px;
+            margin-bottom: 50px;
         }
-        .chart-box {
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(147, 112, 219, 0.3);
-            border-radius: 15px;
-            padding: 30px;
+        .chart-container-modern {
+            background: linear-gradient(145deg, rgba(255,255,255,0.98), rgba(255,255,255,0.92));
+            border-radius: 25px;
+            padding: 35px;
+            box-shadow: 0 15px 35px rgba(16, 185, 129, 0.25);
             position: relative;
-            height: 400px;
+            height: 450px;
+            overflow: hidden;
         }
-        .chart-title { font-size: 1.3em; font-weight: 700; margin-bottom: 20px; color: #a78bfa; }
-        .chart-canvas { position: relative; height: 320px; }
-        .slider-box {
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(147, 112, 219, 0.3);
-            border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 30px;
+        .chart-container-modern::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #10b981, #34d399, #6ee7b7);
         }
-        .slider-label { font-size: 1.2em; font-weight: 600; margin-bottom: 15px; color: #a78bfa; }
-        .slider {
-            width: 100%;
-            height: 6px;
-            border-radius: 3px;
-            background: rgba(147, 112, 219, 0.3);
-            outline: none;
-            margin: 15px 0;
-        }
-        .info-box {
-            background: rgba(147, 112, 219, 0.2);
-            border-left: 4px solid #a78bfa;
-            border-radius: 10px;
-            padding: 25px;
-            margin-bottom: 30px;
-            font-size: 1.1em;
-            line-height: 1.6;
-        }
-        .info-box strong { color: #a78bfa; }
-        .controls {
+        .chart-header {
+            font-size: 1.6em;
+            font-weight: 800;
+            color: #059669;
+            margin-bottom: 25px;
             display: flex;
+            align-items: center;
             gap: 15px;
+        }
+        .chart-wrapper { 
+            position: relative; 
+            height: 350px;
+        }
+        
+        /* Info Banner */
+        .info-banner {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            border-left: 6px solid #10b981;
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2);
+        }
+        .info-banner strong { 
+            color: #065f46; 
+            font-size: 1.3em;
+        }
+        .info-banner p {
+            font-size: 1.2em;
+            color: #047857;
+            line-height: 1.8;
+            margin-top: 10px;
+        }
+        
+        /* Botones Modernos */
+        .action-buttons {
+            display: flex;
+            gap: 20px;
             flex-wrap: wrap;
             justify-content: center;
-            margin-top: 40px;
+            margin-top: 50px;
         }
-        .btn {
-            padding: 15px 35px;
+        .modern-btn {
+            padding: 18px 40px;
             border: none;
-            border-radius: 10px;
-            font-size: 1.1em;
-            font-weight: 600;
+            border-radius: 15px;
+            font-size: 1.2em;
+            font-weight: 700;
             cursor: pointer;
-            background: rgba(147, 112, 219, 0.3);
-            color: #a78bfa;
-            border: 2px solid rgba(147, 112, 219, 0.5);
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #ffffff;
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
-        .btn:hover {
-            background: rgba(147, 112, 219, 0.5);
-            transform: translateY(-3px);
-            border-color: #a78bfa;
+        .modern-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.5s, height 0.5s;
         }
-        .loading { text-align: center; padding: 100px 20px; }
-        .loading p { font-size: 1.5em; margin-top: 20px; }
+        .modern-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        .modern-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(5, 150, 105, 0.5);
+        }
+        .modern-btn span {
+            position: relative;
+            z-index: 1;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div id="loading" class="loading">
-            <h2>🔄 Cargando Dashboard...</h2>
-            <p>Por favor espera</p>
-        </div>
-        <div id="content" style="display: none;">
-            <div class="header">
+        <div id="content">
+            <div class="hero-section">
                 <h1>🔀 División del Dataset</h1>
-                <p>Configuración de train, validación y test</p>
+                <p>Distribución inteligente de datos para entrenamiento</p>
             </div>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-label">🚂 Training</div>
-                    <div class="stat-value" id="trainSize">60%</div>
+            
+            <div class="cards-container">
+                <div class="card-3d">
+                    <div class="card-icon">🚂</div>
+                    <div class="card-title">Training</div>
+                    <div class="card-value" id="trainSize">60%</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-label">✔️ Validación</div>
-                    <div class="stat-value" id="valSize">20%</div>
+                <div class="card-3d">
+                    <div class="card-icon">✔️</div>
+                    <div class="card-title">Validación</div>
+                    <div class="card-value" id="valSize">20%</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-label">🧪 Testing</div>
-                    <div class="stat-value" id="testSize">20%</div>
+                <div class="card-3d">
+                    <div class="card-icon">🧪</div>
+                    <div class="card-title">Testing</div>
+                    <div class="card-value" id="testSize">20%</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-label">📊 Total Muestras</div>
-                    <div class="stat-value">125,973</div>
+                <div class="card-3d">
+                    <div class="card-icon">📊</div>
+                    <div class="card-title">Total</div>
+                    <div class="card-value">125,973</div>
+                </div>
+            </div>
+
+            <div class="slider-control">
+                <div class="slider-title">⚙️ Configuración Personalizada</div>
+                <div class="slider-wrapper">
+                    <div class="slider-label">
+                        <span>Training</span>
+                        <span id="trainLabel">60%</span>
+                    </div>
+                    <input type="range" class="custom-slider" id="trainSlider" min="40" max="80" value="60" oninput="updateSplit()">
+                </div>
+                <div class="slider-wrapper">
+                    <div class="slider-label">
+                        <span>Validación</span>
+                        <span id="valLabel">20%</span>
+                    </div>
+                    <input type="range" class="custom-slider" id="valSlider" min="10" max="40" value="20" oninput="updateSplit()">
                 </div>
             </div>
 
-            <div class="slider-box">
-                <div class="slider-label">Ajusta Training (<span id="trainLabel">60</span>%)</div>
-                <input type="range" class="slider" id="trainSlider" min="40" max="80" value="60" oninput="updateSplit()">
-                <div class="slider-label">Ajusta Validación (<span id="valLabel">20</span>%)</div>
-                <input type="range" class="slider" id="valSlider" min="10" max="40" value="20" oninput="updateSplit()">
-            </div>
-
-            <div class="charts-grid">
-                <div class="chart-box">
-                    <div class="chart-title">📊 División Actual</div>
-                    <div class="chart-canvas"><canvas id="chart1"></canvas></div>
+            <div class="charts-modern">
+                <div class="chart-container-modern">
+                    <div class="chart-header">📊 Distribución Actual</div>
+                    <div class="chart-wrapper"><canvas id="chart1"></canvas></div>
                 </div>
-                <div class="chart-box">
-                    <div class="chart-title">🎯 Distribución por Clase</div>
-                    <div class="chart-canvas"><canvas id="chart2"></canvas></div>
+                <div class="chart-container-modern">
+                    <div class="chart-header">🎯 Balance por Clase</div>
+                    <div class="chart-wrapper"><canvas id="chart2"></canvas></div>
                 </div>
-                <div class="chart-box">
-                    <div class="chart-title">📈 Muestras Distribuidas</div>
-                    <div class="chart-canvas"><canvas id="chart3"></canvas></div>
+                <div class="chart-container-modern">
+                    <div class="chart-header">📈 Cantidad de Muestras</div>
+                    <div class="chart-wrapper"><canvas id="chart3"></canvas></div>
                 </div>
-                <div class="chart-box">
-                    <div class="chart-title">⚖️ Balance de Sets</div>
-                    <div class="chart-canvas"><canvas id="chart4"></canvas></div>
+                <div class="chart-container-modern">
+                    <div class="chart-header">🎯 Comparación de Métodos</div>
+                    <div class="chart-wrapper"><canvas id="chart4"></canvas></div>
                 </div>
             </div>
             
-            <div class="info-box">
-                <strong>ℹ️ División Estratificada:</strong> Se utiliza división estratificada para mantener la proporción de clases en cada conjunto. Training: 75,584 muestras, Validación: 25,195 muestras, Test: 25,194 muestras.
+            <div class="info-banner">
+                <strong>💡 División Estratificada Recomendada</strong>
+                <p>Mantiene la proporción exacta de clases en cada conjunto. Training: 75,584 muestras | Validación: 25,195 muestras | Test: 25,194 muestras. Esto garantiza que cada conjunto sea representativo del dataset completo.</p>
             </div>
-            <div class="controls">
-                <button class="btn">🔀 División Aleatoria</button>
-                <button class="btn">⚖️ División Estratificada</button>
-                <button class="btn">💾 Guardar División</button>
+            
+            <div class="action-buttons">
+                <button class="modern-btn"><span>🔀 Aleatorio</span></button>
+                <button class="modern-btn"><span>⚖️ Estratificado</span></button>
+                <button class="modern-btn"><span>💾 Guardar</span></button>
             </div>
         </div>
     </div>
     <script>
         let charts = {};
-        setTimeout(() => {
-            document.getElementById('loading').style.display = 'none';
-            document.getElementById('content').style.display = 'block';
-            initCharts();
-        }, 800);
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof Chart !== 'undefined') {
+                initCharts();
+            }
+        });
 
         function updateSplit() {
-            // Obtener valores de los sliders
             const trainSlider = document.getElementById('trainSlider');
             const valSlider = document.getElementById('valSlider');
             
@@ -200,30 +355,24 @@
             let val = parseInt(valSlider.value);
             let test = 100 - train - val;
             
-            // Validar que test no sea negativo
             if (test < 0) {
                 test = 0;
                 val = 100 - train;
                 valSlider.value = val;
             }
             
-            // Actualizar las etiquetas de los sliders
-            document.getElementById('trainLabel').textContent = train;
-            document.getElementById('valLabel').textContent = val;
-            
-            // Actualizar los stat cards
+            document.getElementById('trainLabel').textContent = train + '%';
+            document.getElementById('valLabel').textContent = val + '%';
             document.getElementById('trainSize').textContent = train + '%';
             document.getElementById('valSize').textContent = val + '%';
             document.getElementById('testSize').textContent = test + '%';
             
-            // Actualizar el gráfico
             if (charts.split) {
-                charts.split.data.labels = [`Training (${train}%)`, `Validación (${val}%)`, `Test (${test}%)`];
+                charts.split.data.labels = [`Training ${train}%`, `Validación ${val}%`, `Test ${test}%`];
                 charts.split.data.datasets[0].data = [train, val, test];
                 charts.split.update();
             }
             
-            // Calcular y actualizar muestras
             const totalMuestras = 125973;
             const trainMuestras = Math.round(totalMuestras * train / 100);
             const valMuestras = Math.round(totalMuestras * val / 100);
@@ -237,20 +386,24 @@
 
         function initCharts() {
             charts.split = new Chart(document.getElementById('chart1'), {
-                type: 'doughnut',
+                type: 'pie',
                 data: {
-                    labels: ['Training (60%)', 'Validación (20%)', 'Test (20%)'],
+                    labels: ['Training 60%', 'Validación 20%', 'Test 20%'],
                     datasets: [{
                         data: [60, 20, 20],
-                        backgroundColor: ['rgba(167, 139, 250, 0.7)', 'rgba(236, 72, 153, 0.7)', 'rgba(59, 130, 246, 0.7)'],
-                        borderWidth: 2,
-                        borderColor: 'rgba(30, 27, 75, 0.5)'
+                        backgroundColor: ['rgba(16, 185, 129, 0.9)', 'rgba(52, 211, 153, 0.9)', 'rgba(110, 231, 183, 0.9)'],
+                        borderWidth: 3,
+                        borderColor: '#ffffff'
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { labels: { color: '#fff' } } }
+                    plugins: { 
+                        legend: { 
+                            labels: { color: '#064e3b', font: { size: 14, weight: 'bold' } }
+                        }
+                    }
                 }
             });
 
@@ -262,20 +415,23 @@
                         {
                             label: 'Training',
                             data: [40000, 15300, 9000, 6000, 5284],
-                            backgroundColor: 'rgba(167, 139, 250, 0.7)',
-                            borderWidth: 1
+                            backgroundColor: 'rgba(16, 185, 129, 0.8)',
+                            borderWidth: 2,
+                            borderRadius: 10
                         },
                         {
                             label: 'Validación',
                             data: [13343, 5100, 3000, 2000, 1752],
-                            backgroundColor: 'rgba(236, 72, 153, 0.7)',
-                            borderWidth: 1
+                            backgroundColor: 'rgba(52, 211, 153, 0.8)',
+                            borderWidth: 2,
+                            borderRadius: 10
                         },
                         {
                             label: 'Test',
                             data: [13343, 5100, 3000, 2000, 1751],
-                            backgroundColor: 'rgba(59, 130, 246, 0.7)',
-                            borderWidth: 1
+                            backgroundColor: 'rgba(110, 231, 183, 0.8)',
+                            borderWidth: 2,
+                            borderRadius: 10
                         }
                     ]
                 },
@@ -283,58 +439,62 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        y: { beginAtZero: true, grid: { color: 'rgba(167, 139, 250, 0.1)' }, ticks: { color: '#a78bfa' } },
-                        x: { ticks: { color: '#a78bfa' } }
+                        y: { 
+                            beginAtZero: true, 
+                            grid: { color: 'rgba(16, 185, 129, 0.1)' }, 
+                            ticks: { color: '#059669', font: { weight: 'bold' } }
+                        },
+                        x: { ticks: { color: '#059669', font: { weight: 'bold' } } }
                     },
-                    plugins: { legend: { labels: { color: '#fff' } } }
+                    plugins: { legend: { labels: { color: '#064e3b', font: { weight: 'bold' } } } }
                 }
             });
 
-            new Chart(document.getElementById('chart3'), {
+            charts.chart3 = new Chart(document.getElementById('chart3'), {
                 type: 'bar',
                 data: {
                     labels: ['Training', 'Validación', 'Test'],
                     datasets: [{
-                        label: 'Cantidad de Muestras',
+                        label: 'Muestras',
                         data: [75584, 25195, 25194],
-                        backgroundColor: ['rgba(167, 139, 250, 0.7)', 'rgba(236, 72, 153, 0.7)', 'rgba(59, 130, 246, 0.7)'],
+                        backgroundColor: ['rgba(16, 185, 129, 0.85)', 'rgba(52, 211, 153, 0.85)', 'rgba(110, 231, 183, 0.85)'],
                         borderWidth: 2,
-                        borderRadius: 8
+                        borderRadius: 15,
+                        borderColor: ['#10b981', '#34d399', '#6ee7b7']
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        y: { beginAtZero: true, grid: { color: 'rgba(167, 139, 250, 0.1)' }, ticks: { color: '#a78bfa' } },
-                        x: { ticks: { color: '#a78bfa' } }
+                        y: { 
+                            beginAtZero: true, 
+                            grid: { color: 'rgba(16, 185, 129, 0.1)' }, 
+                            ticks: { color: '#059669', font: { weight: 'bold' } }
+                        },
+                        x: { ticks: { color: '#059669', font: { weight: 'bold' } } }
                     },
-                    plugins: { legend: { labels: { color: '#fff' } } }
+                    plugins: { legend: { labels: { color: '#064e3b', font: { weight: 'bold' } } } }
                 }
             });
 
             new Chart(document.getElementById('chart4'), {
-                type: 'radar',
+                type: 'polarArea',
                 data: {
-                    labels: ['Precisión', 'Recall', 'F1-Score', 'Balance', 'Representatividad'],
-                    datasets: [
-                        {
-                            label: 'División Aleatoria',
-                            data: [95, 93, 94, 88, 90],
-                            borderColor: 'rgba(167, 139, 250, 0.8)',
-                            backgroundColor: 'rgba(167, 139, 250, 0.1)',
-                            borderWidth: 2,
-                            pointRadius: 4
-                        },
-                        {
-                            label: 'División Estratificada',
-                            data: [98, 97, 98, 99, 98],
-                            borderColor: 'rgba(236, 72, 153, 0.8)',
-                            backgroundColor: 'rgba(236, 72, 153, 0.1)',
-                            borderWidth: 2,
-                            pointRadius: 4
-                        }
-                    ]
+                    labels: ['Precisión', 'Recall', 'F1-Score', 'Balance', 'Cobertura'],
+                    datasets: [{
+                        label: 'Estratificado',
+                        data: [98, 97, 98, 99, 98],
+                        backgroundColor: [
+                            'rgba(16, 185, 129, 0.7)',
+                            'rgba(52, 211, 153, 0.7)',
+                            'rgba(110, 231, 183, 0.7)',
+                            'rgba(167, 243, 208, 0.7)',
+                            'rgba(209, 250, 229, 0.7)'
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
                 },
                 options: {
                     responsive: true,
@@ -343,11 +503,12 @@
                         r: {
                             beginAtZero: true,
                             max: 100,
-                            ticks: { color: '#a78bfa' },
-                            pointLabels: { color: '#a78bfa' }
+                            ticks: { color: '#059669', backdropColor: 'transparent' },
+                            pointLabels: { color: '#064e3b', font: { weight: 'bold' } },
+                            grid: { color: 'rgba(16, 185, 129, 0.2)' }
                         }
                     },
-                    plugins: { legend: { labels: { color: '#fff' } } }
+                    plugins: { legend: { labels: { color: '#064e3b', font: { weight: 'bold' } } } }
                 }
             });
         }
